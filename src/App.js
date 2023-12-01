@@ -1,0 +1,71 @@
+import React, { useEffect, useState } from 'react'
+import LoginForm from "./page/login/loginForm"
+import {Routes, Route,useLocation} from 'react-router-dom'
+import ErrorPage from './components/ErrorPage';
+import { ProtectedRoute } from './auth/ProtectedRoute'
+import { File } from './test/File'
+import { Render } from './test/Render'
+import {QuestionRender} from "./page/exam/component/QuestionRender";
+import { useSelector } from 'react-redux'
+import { Loader } from './components/load/Loader'
+import { GetHelpWithSigning } from './page/login/resetAccount'
+import { ExamLayout } from './layout/ExamLayout'
+import  Exam from "./page/exam/exam"
+import Main from './page/main/main';
+const LazyLoader = React.lazy(()=> import("./layout/ExamLayout"))
+
+
+const App =()=>{
+const location = useLocation()
+const loading = useSelector((state)=> state.loader.loading)
+ 
+
+
+  useEffect(()=>{
+  const title  = location.pathname.slice(1,
+                location.pathname.length)
+  const getTitle =  title.replace("/", " - ")
+  document.title = getTitle
+  },[location.pathname])
+
+  return <div className='App'>
+ { loading && <><Loader/></>}  
+<Routes>
+
+     <Route path="/" element={<LoginForm/>}></Route>
+      <Route path='/login'
+      element={<LoginForm/>}/> 
+      <Route path='/login/reset-account' element={<GetHelpWithSigning/>}/>
+    
+      
+    <Route path='/exam'  errorElement={<ErrorPage/>} 
+    element={<ProtectedRoute><ExamLayout/></ProtectedRoute>} >
+      <Route path='/exam' element={<Exam/>}></Route>
+      <Route path='/exam/sub/:name' element={<QuestionRender/> }></Route>
+      <Route path='/exam/profile' element={
+      <ProtectedRoute>
+     <h2>Profile</h2>
+      </ProtectedRoute>}></Route>
+      </Route>
+    
+    <Route path='/main' element={<ProtectedRoute><Main/></ProtectedRoute>}></Route>
+
+    {/* Error page not found */}
+    <Route path='/*' element={<ErrorPage ></ErrorPage>}/>
+     
+     {/*tesfile*/}
+    <Route path='/file' element ={<File/>}>
+    </Route>
+    <Route path='/file/:name' element ={<Render/>}></Route>  
+
+   </Routes>
+
+
+
+
+
+  </div>
+}
+
+
+export default App;
