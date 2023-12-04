@@ -65,7 +65,7 @@ return <>
         <>
    <div className="container mx-auto  
    relative  py-2 md:py-5 ">
-    <div className="flex text-[24px] items-center gap-1 pb-2 mt-[4rem]">
+    <div className="flex text-[24px] items-center gap-1 pb-2 2xl:mt-[7rem] mt-[4rem]">
       <h1 className=" font-roboto">Hello</h1>
      <button className="md:mx-0 border-none text-[24px]  mx-3" 
      onClick={handleSubmitReport}>{cookie.get('studentname')}</button>

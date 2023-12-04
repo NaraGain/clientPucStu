@@ -13,7 +13,8 @@ const axiosInstance = axios.create({
 })
 
 
-export const axiosBaseQuery = ({baseURL} = {baseURL : process.env.REACT_APP_API_KEY}) => 
+export const axiosBaseQuery = ({baseURL} = 
+    {baseURL : process.env.REACT_APP_API_KEY}) => 
 async ({url , method , data , params})=>{
     try {
         const result = await axios({

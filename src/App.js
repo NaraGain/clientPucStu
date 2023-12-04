@@ -38,18 +38,12 @@ const loading = useSelector((state)=> state.loader.loading)
       <Route path='/login/reset-account' element={<GetHelpWithSigning/>}/>
     
       
-    <Route path='/exam'  errorElement={<ErrorPage/>} 
+    <Route path='/'  errorElement={<ErrorPage/>} 
     element={<ProtectedRoute><ExamLayout/></ProtectedRoute>} >
+      <Route path='/main' element={<ProtectedRoute><Main/></ProtectedRoute>}/>
       <Route path='/exam' element={<Exam/>}></Route>
       <Route path='/exam/sub/:name' element={<QuestionRender/> }></Route>
-      <Route path='/exam/profile' element={
-      <ProtectedRoute>
-     <h2>Profile</h2>
-      </ProtectedRoute>}></Route>
       </Route>
-    
-    <Route path='/main' element={<ProtectedRoute><Main/></ProtectedRoute>}></Route>
-
     {/* Error page not found */}
     <Route path='/*' element={<ErrorPage ></ErrorPage>}/>
      

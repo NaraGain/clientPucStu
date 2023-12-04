@@ -27,7 +27,9 @@ import { questionAction } from '../redux/questionSlice';
         })
 
         sockectInstance.on('countdownFinished', ()=> {
+            alert("countdown is Finished")
             dispatch(questionAction.disableState())
+
         })
     // let myInterval = setInterval(() => {
     //         if (seconds > 0) {
@@ -49,21 +51,23 @@ import { questionAction } from '../redux/questionSlice';
     return ( <> {
         countdown.initialMinute === 0 && 
         countdown.initialSeconds === 0 ? <></> : <div className=' md:text-[14px] text-[12px] '>
-        { countdown.initialMinute === 0 && countdown.initialSeconds === 0
+        { countdown.initialMinute === 0 && countdown.initialSeconds.toString() === "00"
             ? <div 
-            className='py-1 px-2 md:px-2  font-sans font-bold space-x-2 
-            flex items-center rounded-md border-[1px] border-yellow-300
+            className='py-1 px-2 md:px-2 bg-neutral-50 text-variation-500 font-sans font-bold space-x-2 
+            flex items-center rounded-full border-[1px] border-yellow-300
                '>
                 <p className='text-yellow-700 '>
                     😌Time is Out</p></div>
-            : <div className={`py-1 px-3 md:px-1.5 text-variation-500 border-[1px]   gap-3 flex items-center 
-             ${ countdown.initialMinute <= 5 ? 'border-rose-500 text-rose-500 ':" bg-neutral-50  border-neutral-200" }
-                 rounded-md  `}>
+            : <div className={`py-1 px-3 md:px-1.5 text-variation-500 border-[1px] bg-neutral-50 gap-3 flex items-center 
+             ${ countdown.initialMinute <= 5 ? 'border-rose-500 text-rose-500 bg-neutral-50'
+             :" bg-neutral-50  border-neutral-200" }
+                 rounded-full  `}>
                     <div className='h-5 w-5 md:h-4 md:w-4'>
                     <Icon name={<FcAlarmClock/>}></Icon>
                     </div>
                   <h1 className='font-mono font-bold text-[16px] '>
-                     {countdown.initialMinute}:{countdown.initialSeconds < 10 ?  `${countdown.initialSeconds}` : countdown.initialSeconds}</h1> 
+                     {countdown.initialMinute}:{countdown.initialSeconds < 10 ?  `${countdown.initialSeconds}`
+                      : countdown.initialSeconds}</h1> 
              </div> 
         }
         </div>

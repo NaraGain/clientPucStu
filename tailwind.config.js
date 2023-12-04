@@ -15,11 +15,17 @@ module.exports = {
       'gray-900' : "#020617",
       "gray-300" : "#d1d5db",
       "gray-600" : "#475569",
+      "yellow-50" : "#fefce8",
       'yellow-300' : "#fde047",
       'yellow-400' : "#fcd34d",
+      "rose-50"     : "#fff1f2",
       "rose-600" : "#be123c",
       "rose-500" : "#f43f5e",
       "slate-800" : "#1e293b",
+      "purple-100" :"#f3e8ff", 
+      "green-50"    : "#dcfce7",
+      "green-800" : "#166534",
+
     },
    
     screens: {

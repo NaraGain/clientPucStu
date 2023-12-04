@@ -74,7 +74,7 @@ return  <div className="flex md:items-center min-h-screen md:bg-gray-50">
     <div className="flex flex-col md:flex-row">
         <div className="h-full md:h-auto md:w-1/2 ">
             <img className="object-cover w-full md:h-full h-[16rem] rounded-none md:rounded-tl-lg md:rounded-bl-lg" 
-            src={"https://www.kindpng.com/picc/m/69-699661_planets-clipart-space-jam-solar-system-with-transparent.png"}
+            src={"https://travelcdns.cambodia-travel.com/1664686135549.jpg"}
                 alt="img" />
         </div> 
         <div className="flex items-center justify-center mt-3 md:mt-0  md:w-1/2">
@@ -90,21 +90,21 @@ return  <div className="flex md:items-center min-h-screen md:bg-gray-50">
                 <form>
                 <div className="sm:pb-8 my-5 sm:px-12">
                 <div>
-                    <label className="block mb-4 text-start text-md font-semibold">
+                    <label className="block mb-2 text-start text-md font-semibold">
                         Username
                     </label>
                     <Input 
                         onChange={(e)=> setUsername(e.target.value)}
-                        className="w-full py-3"
+                        className="w-full py-2"
                          />
                 </div>
                 <div>
-                    <label className="block my-4 text-start text-[16px] font-semibold ">
+                    <label className="block my-2 text-start text-[16px] font-semibold ">
                         Password
                     </label>
-                    <Input.Password onChange={(e)=> setPassword(e.target.value)} className="py-3"/>
+                    <Input.Password onChange={(e)=> setPassword(e.target.value)} className="py-2"/>
                 </div>
-                    <p className="font-thin-[200px] text-center hover:text-purple-900 text-[14px]
+                    <p className="font-thin-[200px] my-2 text-center hover:text-purple-900 text-[14px]
                            text-variation-500 hover:text-variation-400">
                     <Link to={"/login/reset-account"}>
                     Get Help with Signing In!
@@ -114,7 +114,7 @@ return  <div className="flex md:items-center min-h-screen md:bg-gray-50">
          <button
          type="submit"
          onClick={handleSubmit}
-                    className="block w-full px-4 py-3 text-[18px] mt-5 
+                    className="block w-full px-4 py-2 text-[16px] mt-5 
                     text-sm bg-variation-500 rounded-md font-medium leading-5 text-center 
                     text-white transition-colors duration-150
                      bg-purple-700 border border-transparent 

@@ -8,8 +8,9 @@ import Cookies from "universal-cookie";
 import Avatar from "../../components/Avatar";
 import { useDispatch } from "react-redux";
 import Icon from "../../components/Icon";
-import { CiAlignCenterV, CiCircleInfo } from "react-icons/ci";
-
+import { CiAlarmOn, CiAlignCenterV, CiCircleInfo, CiMedal, CiReceipt, CiUser} from "react-icons/ci";
+import Header from "../../components/Header"
+import Timer from "../../components/Timer";
 
 
 export default function Main () {
@@ -34,89 +35,74 @@ export default function Main () {
     },[])
 
     return <>
-    <nav
-     className="bg-white m-0 bg-repeat flex justify-between items-center 
-     bg-auto shadow-sm shadow-neutral-200 fixed w-full z-10 py-2 px-3">
-        <span className="flex items-center gap-3">
-        <img   className="w-9 h-9"  src="./asset/Puc_logo.png"/>
-        <ul className="flex gap-3 mx-7 font-normal text-gray-600">
-            <li className="disable cursor-not-allowed">
-                Class
-            </li>
-            <li>
-                <Link
-                state={data?.exam ? data?.exam[0] : null} 
-                to={"/exam"}
-                >
-                Exam
-                </Link>
-                </li>
-        </ul>
-        </span>
-        
-        <AvatarUser/>
-    </nav>
-    <Container>
-    <div className=" mx-2 md:max-w-7xl h-full md:mx-auto flex
-     justify-center gap-2 relative top-[5rem]">
-        <div className="w-full ">
-        <Card
-        className="rounded-"
-        >
-        <Meta
-          avatar={<Avatar  name={cookie.get('studentname')}/>}
-          title={`Hi ${cookie.get('studentname')}`}
-          description={<p className="text-variation-400">
+    <div className=" mx-2 md:container h-full md:mx-auto flex flex-col
+     justify-center gap-2  mt-[5rem]">
+        <div
+        className="rounded-xl p-0  text-white w-full ">
+        <div className="flex flex-col lg:flex-row gap-2 m-0">
+          <div className="lg:basis-[70%] bg-rose-50 p-[3rem] rounded-xl ">
+            <span className="flex gap-2 items-center">
+              <Icon color={"#be123c"} Size={"5rem"} name={<CiUser/>}></Icon>
+              <div>
+              <p className="text-variation-500 text-[24px] lg:text-[38px]">
+            Hello {cookie.get('studentname')}</p>
+              <p className="text-variation-500 text-[18px]">
             GroupName :
             {groups.state.group}
-
-          </p>}
-        />
-        <div className="flex justify-end">
-        <Link state={data?.exam ? data?.exam[0] : null} 
+          </p>
+              </div>
+          
+            </span>
+          </div>
+        <div className="lg:basis-1/2 rounded-xl p-[3rem] bg-purple-100">
+          <span className="flex gap-2 items-center">
+            <div className="h-[5rem] w-[5rem]">
+            <Icon color={"#581c87"}  name={<CiReceipt/>}></Icon>
+            </div>
+            <div>
+            <p className="text-variation-500
+             font-semibold text-[32px] lg:text-[38px]">
+              exam
+          </p>
+          <Timer/>
+          <div>
+          <Link state={data?.exam ? data?.exam[0] : null} 
          to={"/exam"}>
-        <Button className="rounded-full
-         bg-variation-500 text-white w-[7rem]">Exam</Button>
+        <Button className="rounded-full border-none mt-4 
+         bg-variation-500 text-white w-[10rem]">Go to exam page</Button>
         </Link>
+          </div>
+            </div>
+          </span>
         </div>
-             
-        </Card>  
-    
-    <div className="grid md:grid-cols-2 mt-[1rem] gap-4">
-    <Card className="rounded-xl"  >
+        </div> 
+        </div> 
+        <div className="mt-4 flex gap-3 items-center">
+        <Icon Size={"2rem"} name={<CiMedal/>}/>
+        <h1 className="text-[20px]">Activities</h1>
+          </div>   
+    <div className="grid grid-cols-2 mt-[1rem] gap-2">
+    <Card className="rounded-xl bg-yellow-50  md:p-[3rem]">
                 <Meta
-          avatar={<div className="bg-neutral-50 p-2
-           border-neutral-200 border-[1px]  rounded-full">
+          avatar={<div className="md:gap-2 flex flex-col md:flex-row">
             <Icon color={"#0f3460"}
-         Size="3rem" name={<CiAlignCenterV/>}></Icon>
+         Size="4rem" name={<CiAlignCenterV/>}></Icon>
+           <p className="text-[34px]">classes</p>
             </div>}
-          title="Class"
-          description={ <ul className="flex flex-wrap gap-2">   
-          </ul>
-          }
         />
             </Card>
-    <Card className="rounded-xl">
+    <Card className="rounded-xl md:p-[3rem] border-none
+     bg-green-50 shadow shadow-yellow-50">
                 <Meta
-                 avatar={<div className="bg-neutral-50 
-                 rounded-full border-neutral-200 border-[1px]  p-4">
-                    <Icon Size={"3rem"}
-                  name={<CiCircleInfo/>}></Icon>
-
+                 avatar={<div className="flex flex-col md:flex-row md:gap-2 items-center">
+                    <Icon color={"#166534"} Size={"4rem"}
+                    name={<CiCircleInfo/>}></Icon>
+                        <p className="text-[34px]">Report</p>
                  </div>}
-                  title={"Report"}
                 />
         </Card>
     </div>
-    
-
-        </div>
- 
-
    </div>       
-    </Container>
- 
-    
     </>
 }
 

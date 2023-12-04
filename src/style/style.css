@@ -1,11 +1,10 @@
-.main_background{
-    background-image:
-     url("https://raw.githubusercontent.com/ProgrammingHero1/ProgrammingHero1/main/image/banner.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover; 
-    height:500px;
-    position: relative;
+.main_bg{
+     background-image:
+     url("../../public/asset/BlackFriday.png");
+    object-fit: cover;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
   }
 
    .exam-section-bg{
@@ -92,14 +91,14 @@
 
 @media  screen and (max-width:640px) {
 
- .main_background{
+ .main_bg{
     background-image:/* linear-gradient(rgba(146, 93, 231, 0.898), rgba(99, 15, 177, 0.829)), */
-     url("https://cdn.nrf.com/sites/default/files/styles/crop_1440_700/public/2021-03/shutterstock_658847998.jpg?itok=S6aLTAcl");
+    url("../../public/asset/BlackFriday.png");
     background-position: center;
-    background-repeat: no-repeat;
     background-size: cover; 
-     position: relative;
-     height: 20rem;
+    position: relative;
+    width: auto;
+    height: 200px;
     
      
   }
