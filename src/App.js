@@ -12,7 +12,6 @@ import { GetHelpWithSigning } from './page/login/resetAccount'
 import { ExamLayout } from './layout/ExamLayout'
 import  Exam from "./page/exam/exam"
 import Main from './page/main/main';
-import ExamTest from './test/ExamTest';
 const LazyLoader = React.lazy(()=> import("./layout/ExamLayout"))
 
 
