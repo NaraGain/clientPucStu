@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import LoginForm from "./page/login/loginForm"
-import {Routes, Route,useLocation} from 'react-router-dom'
+import {Routes, Route,useLocation, Outlet} from 'react-router-dom'
 import ErrorPage from './components/ErrorPage';
 import { ProtectedRoute } from './auth/ProtectedRoute'
 import { File } from './test/File'
@@ -12,6 +12,7 @@ import { GetHelpWithSigning } from './page/login/resetAccount'
 import { ExamLayout } from './layout/ExamLayout'
 import  Exam from "./page/exam/exam"
 import Main from './page/main/main';
+import ExamTest from './test/ExamTest';
 const LazyLoader = React.lazy(()=> import("./layout/ExamLayout"))
 
 
@@ -42,15 +43,21 @@ const loading = useSelector((state)=> state.loader.loading)
     element={<ProtectedRoute><ExamLayout/></ProtectedRoute>} >
       <Route path='/main' element={<ProtectedRoute><Main/></ProtectedRoute>}/>
       <Route path='/exam' element={<Exam/>}></Route>
-      <Route path='/exam/sub/:name' element={<QuestionRender/> }></Route>
+      <Route path='/exam/:name' element={<QuestionRender/> }></Route>
       </Route>
     {/* Error page not found */}
     <Route path='/*' element={<ErrorPage ></ErrorPage>}/>
      
      {/*tesfile*/}
-    <Route path='/file' element ={<File/>}>
-    </Route>
-    <Route path='/file/:name' element ={<Render/>}></Route>  
+     <Route path='/' errorElement={<ErrorPage/>} element={<>
+      <nav className=''></nav>
+      <Outlet></Outlet>
+     </>}>
+     <Route path='/file' errorElement={<ErrorPage/>} element ={<File/>}></Route>
+     <Route path='/file/:name' rrorElement={<ErrorPage/>} element ={<Render/>}></Route>  
+    <Route path='/file/test' rrorElement={<ErrorPage/>} element ={<ExamTest/>}></Route>  
+     </Route>
+   
 
    </Routes>
 

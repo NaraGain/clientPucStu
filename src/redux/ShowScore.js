@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const showScoreSlice = createSlice({
     name : 'show',
     initialState : {
-        isShow : ''
+        isShow : false
     },
     reducers : {
         onShow : (state,actions)=>{

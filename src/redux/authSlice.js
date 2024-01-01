@@ -9,7 +9,7 @@ export const authSlice = createSlice({
     },
     reducers : {
         userInof:(state ,action)=>{
-            state.userId = action.payload.userId
+            state.userId = action.payload.id
         },
         login(state){
             state.isLogIn = true

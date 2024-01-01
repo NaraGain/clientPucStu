@@ -9,7 +9,8 @@
 .env
 # production
 /build
-
+#test-file
+/src/test
 # misc
 .DS_Store
 .env.local

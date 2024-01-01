@@ -1,19 +1,11 @@
-.main_bg{
-     background-image:
-     url("../../public/asset/BlackFriday.png");
-    object-fit: cover;
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-  }
 
-   .exam-section-bg{
-    background-image: url("../../public/asset/purple-bg.png");
-    background-size: cover;
+
+   .bg-rule{
+    background-image: url("../../public/asset/rulebg.png");
     background-repeat: no-repeat;
-
-
+    background-size: cover;
    }
+
    .welcome-section-bg{
     background-image: url("../../public/asset/red-bg.png");
     background-repeat: no-repeat;
@@ -91,17 +83,7 @@
 
 @media  screen and (max-width:640px) {
 
- .main_bg{
-    background-image:/* linear-gradient(rgba(146, 93, 231, 0.898), rgba(99, 15, 177, 0.829)), */
-    url("../../public/asset/BlackFriday.png");
-    background-position: center;
-    background-size: cover; 
-    position: relative;
-    width: auto;
-    height: 200px;
-    
-     
-  }
+
   .about-hero{
     background-image:/* linear-gradient(rgba(146, 93, 231, 0.898), rgba(99, 15, 177, 0.829)), */
      url("https://eamu.edu.kh/wp-content/uploads/2022/09/Student-Librarian-Duty-1.jpg");

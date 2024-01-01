@@ -6,7 +6,7 @@ export const login = async (payload)=>{
         const respone = await axiosInstance.post('student/login', payload)
         return respone.data
     } catch (error) {
-            return error.respone
+            return error.response.data
     }
 }
 

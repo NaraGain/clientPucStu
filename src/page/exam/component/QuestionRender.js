@@ -1,309 +1,416 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams ,Link, useSearchParams, useLocation} from "react-router-dom";
-import ExamStatus from "./ExamStaute";
-import { Button, Checkbox, Result, message ,Layout, Menu, theme, Space } from 'antd';
-import axios from "axios";
-import NavigatorButton from "../../../components/NavigatorButton";
-import { loadingAction } from "../../../redux/loaderSlice";
-import FillBlanks from "../../../components/FillBlank";
-import { VocabularyCard } from "../../../components/VocabularyCard";
+import {useLocation, useNavigate } from "react-router-dom";
+import { questionAction } from "../../../redux/questionSlice";
+import { Button, Form, Input, Result } from "antd";
 import Writing from "../../../components/Writing";
-import { getQuestionAsync, questionAction } from "../../../redux/questionSlice";
+import Instruction from "../../../components/Instruction";
 import { RenderFile } from "./RenderFile";
+import Icon from "../../../components/Icon";
+import { CiCircleChevLeft, CiCircleChevRight } from "react-icons/ci";
 
-export const QuestionRender = ({showScore}) => {
-  const {name , id } = useParams()
-  const test = useParams()
-  const dispatch = useDispatch()
+
+
+export  const QuestionRender = () =>{
+  const [form] =  Form.useForm()
+  const location = useLocation()
   const navigator = useNavigate()
-  const [currentQuestion ,setCurrentQuestion] = useState(0)
-  const [previous, setPrevious] = useState(false);
-  const [show,setShow] = useState(false)
-  const [load, setLoad] = useState(false);
-  const [checked ,setChecked] = useState(false)
-  const [examId ,setExamId] = useState()
-  const [newData , setNewData] = useState([])
-  const [markPoint ,setMarkPoint] = useState(0)
-  const [searchParams, setSearchParams] = useSearchParams();
-  const subId = useLocation()
-  const questions = useSelector(state =>state.question.subject)
-  const queryQuestion = useSelector(state => state.question.questions)
-  const reading = useSelector(state => state.question.reading)
-  const userId = useSelector(state => state.auth.userId)
-  const point = useSelector(state => state.question.markPoint)
-  const [collapsed, setCollapsed] = useState(false);
-  const [data ,setData] = useState([])
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken(); 
-
-const getQuestion = async ()=>{
-  await axios.get(`${process.env.REACT_APP_API_KEY}quiz/${subId.state.id}`).then(res=>{
-    dispatch(loadingAction.ShowLoading())
-    setExamId(res.data.quizs.ExamId)
-    setData(res.data.quizs.question)
-    dispatch(loadingAction.HideLoading())
-  })
-}
-
-useEffect(()=>{
-  dispatch(loadingAction.ShowLoading())
-  dispatch(getQuestionAsync({sub_id : subId.state.id}))
-  getQuestion()
-  dispatch(loadingAction.HideLoading())
-},[dispatch])
+  const [check ,setChecked] = useState(false)
+  const dispatch = useDispatch()
+  const searchParams = new URLSearchParams(location.search)
+  const name = searchParams.get('name')
+  const questions = useSelector(state =>
+  state.question.subject?.find((i => i.title == name )))
+ const [intputvalue ,setInputValue] = useState({ })
+ const [currentQuestion ,setCurrentQuestion] = useState(0)
+ const [previous , setPrevious] = useState(false)
+ const [collapsed , setCollapsed] = useState(false)
+ const [answerBtn , setAnswer] = useState(false)
+ const [result , setResult] = useState(false)
 
 
 
-const handleAnswerNext = () => {
-  const nextQuestion = currentQuestion + 1
-  if(nextQuestion < data.length){
-    setPrevious(true)
-    setCurrentQuestion(nextQuestion)
+ //handle Fill question have been complete function
+const handeFillForm = (value)=> {
+  if(questions?.progress !== 0){
+    form.setFieldsValue(questions?.question[currentQuestion]?.userAnswer)
   }else{
-    setShow(true)
+    form.setFieldsValue('')
   }
-
+  form.setFieldsValue(value)
 }
 
-  const handleAnswerOptionClickPrev = () => {
-    const nextQuestion = currentQuestion - 1;
-    if (nextQuestion < data.length) {
-      setTimeout(()=>{
-        setLoad(true)
-        setCurrentQuestion(nextQuestion)
-        setTimeout(()=>{setLoad(false)},[600])
-      },90) 
+
+// handle caculate fill in blank question is correct anwer is match in blank
+// mark point is will plus one for in box
+const getAnswer = (value, qid, title , correctAnswer)=>{
+  // alert(`Form submitted for item ${qid}:`)
+  let markPointOfEachBox = 0
+  for(let key in correctAnswer[0]){
+    if(value[key].toLowerCase() === correctAnswer[0][key].toLowerCase()){
+        markPointOfEachBox++
+    }
+  }
+  //dispacth data into redux quetsionslice
+  dispatch(questionAction.handleChangeBlank({
+    title : title,
+    qid   : qid,
+    answer : value,
+    markPoint : markPointOfEachBox
+  }))
+}
+
+
+//replace  text with input function
+const replaceWordWithInput = (replace, word, qid, title, answer)=> {
+  let count = 0
+  const sentence = word.split(' ')
+  return (<div className="text-[16px] leading-4" > { sentence.map((word, index)=>{
+    const cleanWord = word.replace(/[.,]/g, '');
+    if(replace.includes(cleanWord)){
+      count+=1
+      return (
+        <span className="inline-flex ">
+        <Form.Item name={`blank${count}`}>
+        <Input 
+        autoSave
+        maxLength={cleanWord.length}
+        value={intputvalue[`blank${count}`] || ' '}
+         className={`border w-[10rem]`} 
+        type="text"
+        />
+        </Form.Item>
+        </span>
+      )
     }else{
-      setShow(false)
+      return <span className="leading-8"> {word} </span>
     }
-    if( nextQuestion < 1){
-      setPrevious(false)
+  }) } </div>)
+}
+//replace  text with input function
+
+//next button function//
+const handleAnswerNext = ()=>{
+  const nextQuestion = currentQuestion + 1
+  if(nextQuestion < questions?.question.length){
+    setCurrentQuestion(nextQuestion)
+    setPrevious(true)
+  }else{
+    setResult(true)
+  }
+}
+// pervious button function
+const handleAnswerPrev = () =>{
+  const nextQuestion = currentQuestion - 1
+  if(nextQuestion < questions?.question.length){
+    setCurrentQuestion(nextQuestion)
+    setAnswer(false)
+    form.resetFields()
+  }else {
+    setPrevious(false)
+  }
+  if(nextQuestion < 1){
+    setPrevious(false)
+  }
+}
+
+//navigate button click question//
+const handleNavigate = (key) => {
+  setCurrentQuestion(key)
+}
+
+// toggleCollapsed function
+const handletoggleCollapsed = ()=>{
+  setCollapsed(!collapsed)
+}
+
+//calutatemark on mqc question fucntion//
+const calulateScore = (name , answer, questionPoint, isChecked, correctAnswer,value)=>{
+   let Point = 0
+    if(name === "Blank"){
+
+    }else if (name === "Mqc"){ 
+        if(answer && isChecked){  
+          if(correctAnswer.indexOf(value) !== -1){
+            Point = questionPoint
+          }
+        }else if(answer && !isChecked){
+          Point = questionPoint - questionPoint
+        }
     }
-  }
+    return Point
+}
 
-  const handlenavigtor = (key) => {
-      setCurrentQuestion(key)
-  }
+// caculate total socre all question score function
+const toalPoints = () => {
+      let Total = 0
+    const number = questions.question
+    .map((itmes,key)=> itmes.markPoint)
+    Total = number.reduce((a , b) => a+b)
+    return Total
+}
 
-  const caculatePoint =(currentQuizPoint) =>{
-      let status = ''
-      let result = currentQuizPoint / 2 
-      if(point <= result){
-        status = 'failed'
-      }else{
-        status = 'pass'
-      }
-
-      return status
-
-  }
-
-  const hanndleChecek = (value ,qId, correctAns) => {
-    setChecked(!checked)
-    console.log(value ,qId)
-    const quizTest = data.find(questionId =>  questionId._id == qId)
-    console.log(quizTest)
-    let checkeds = quizTest.options.find(i => i.value == value)
-    checkeds.isSelect = checked
-    if(correctAns){
-      setMarkPoint(markPoint => markPoint += 1)
-      dispatch(questionAction.countMarkPoint({markPoint : markPoint}))
+// provice status function to each section stauts
+const statusSection = (fullScore) =>{
+    console.log(fullScore , toalPoints())
+    let status = ""
+    let point = toalPoints()
+    let result =  fullScore / 2
+    if(point <= result){
+      status = "failed"
     }else{
-      setMarkPoint(markPoint)
+      status = "pass"
     }
+    return status
+}
 
-  }
+//prevent user reload page 
+const handleBeforeUnload = (event)=>{
+  event.preventDefault()
+ (event || window.event).return = "Are you sure you want to leave this page?"
+}
 
 
- 
-return <>
+useEffect(()=> {
+  const type = searchParams.get('question')
+  handeFillForm()
+
+  window.addEventListener('beforeunload',handleBeforeUnload)
+  return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+}, [location.search, handeFillForm])
+
+  return <div className="flex flex-col lg:flex-row w-full h-screen font-roboto">
+          {
+            questions ? <>
+              <Button className="md:block hidden  mt-[3.7rem] border-none fixed shadow-none z-10" 
+     onClick={handletoggleCollapsed}>
+      { collapsed ? <Icon Size={"1.3rem"} name={<CiCircleChevRight/>}/>:<Icon Size={"1.3rem"} 
+      name={<CiCircleChevLeft/>}/>}</Button>
+    <div className={`${collapsed ? "w-0 transition-transform duration-100 ease-out" 
+    : "lg:w-1/5 2xl:w-[20%]"}  lg:bg-white mt-0 overflow-y-auto`}>
+      <div className=" border-b border-neutral-200 mt-[3.5rem] lg:block hidden 
+      transition-transform duration-500 ease-in-out">
+    <p className="hidden overflow-x-auto 
+    py-2 mx-[5rem] lg:block font-roboto">Progress {questions.progress}</p>
+      </div>
+      <ul className="mt-[4.5rem]   overflow-x-auto lg:mt-0 lg:flex-col flex justify-center">
     {
-     data.length > 0 ? <>
-      <div className="flex flex-col lg:flex-row w-full h-screen">
-        {/* <!-- User List --> */}
-        <div className="lg:w-1/5 md:block hidden bg-white mt-0 lg:mt-[4rem] overflow-y-auto">
-            <div className="p-4">
-                <h2 className="text-lg font-semibold mb-4 px-4">Queston index</h2>
-            
-                <ul>
-                  {
-                    data.map((item ,key)=>
-                    <li   onClick={()=> {
-                      handlenavigtor(key)
-                    }}
-                     className={`flex items-center p-3 cursor-pointer
-                     ${item._id === data[currentQuestion]._id ?
-                       "bg-neutral-50" : ""}
-                     space-x-3 mb-2 rounded-md`}>
-                        <span className="truncate">{name + " question"} {key+1} </span>
-                    </li>)
-                  }
-                </ul>
-            </div>
-        </div>
-        {/* <!-- Chat Area --> */}
-        <div className="lg:w-[75%]  flex-1 md:mt-[4rem] 2xl:mt-[7rem] mt-[6rem] 
-         border-l border-neutral-200
-         bg-neutral-50 flex flex-col">
-            {/* <!-- Chat Header --> */}
-            {/* <!-- question form --> */}
-            <div className="flex-1 overflow-y-auto  md:p-4">
-                {/* <!-- question --> */}
-  
-                  {
-                    // final question
-                    show ? <Result
-                    subTitle={`${name} student ${userId} examId ${examId} Score ${point}`}
-                    title={"click button for go home page"}
-                    status = "success"
-                    extra={
-                      <div className="flex gap-3 justify-center">
-                      <Button onClick={()=> {
-                        handleAnswerNext()
-                        setShow(false)
-                      }
-                        }>previous</Button>
-                      <Button onClick={()=>{
-                        navigator(-1)
-                        dispatch(questionAction.addReport({
-                        markPoint : point,
-                         subjectName : name,
-                         status : caculatePoint(subId.state.score)
-                          
-                        }))
-                        
-                        }}>Go back</Button>
-                      </div>
-                     
-                    }
-                    /> :
-                    // task box
-                    <div className="max-w-4xl 2xl:max-w-6xl 
-                    2xl:h-[40rem] md:h-[28rem] overflow-y-auto
-                     mx-auto py-4 px-5 lg:bg-white lg:border-[1px] border-neutral-200 lg:rounded-lg  ">
-                      {
-                        data[currentQuestion].name == "writing" ? <>
-                        <p className="text-[16px] md:text-[20px]">
-                          {data[currentQuestion].description}</p>
-                        <ul className="space-y-3 mx-4">
-                          {data[currentQuestion].options.map((item ,key)=><li
-                           className="break-words list-decimal"
-                           key={key}>
-                            {item.value}
-                          </li>)}
-                        </ul>
-                        <>
-                        <Writing e_id={examId} user_id={userId} />
-                        </>
-                    
-                        </> : <div>
-                        {
-                      data[currentQuestion].name === 'Blank' ? <>
-                      <VocabularyCard src={data[currentQuestion].options}/>
-                      </>  
-                      :<p className="md:text-[20px] text-[18px] break-words">
-                        {currentQuestion + 1 }. 
-                       {data[currentQuestion].question}</p> 
-                    }
-                     <p className="text-[16px] py-2 text-gray-600 break-words">✨
-                      {data[currentQuestion].description ? data[currentQuestion].description 
-                      : "be carefull for select Answer"}</p>
-                     {
-                      data[currentQuestion].upload ? 
-                      <><RenderFile type={data[currentQuestion].upload.type} 
-                      path={data[currentQuestion].upload.path}/> </> : <></>
-                     }             
-                      {
-                        data[currentQuestion].options.map((item , key)=> <div key={key}>
-                          {
-                            data[currentQuestion].name === "Mqc" ? <ul className="">
-                              <li className="bg-white rounded-md p-3 my-3  mx-2 
-                              ">
-                                <label className="gap-2 flex items-center cursor-pointer">
-                                <input className="w-5 h-5" type="checkbox" 
-                                 checked={item.isSelect}
-                                 onChange={()=> {hanndleChecek(item.value 
-                                  ,data[currentQuestion]._id , 
-                                item.isCorrect)}} key={item.length + 1}
-                                 value={item.value}/>
-                                  {item.value}</label>
-                              </li>
-                            </ul> : <></>
-                          }
-                        </div>
-                        )
-                      }
-                      <>
-                      {
-                            data[currentQuestion].name === "Blank" ? 
-                              <>
-                             <FillBlanks
-                             mark={markPoint}
-                              correctAnswers={data[currentQuestion].correctAnswer}
-                               regExps={data[currentQuestion].options} 
-                             sentence={data[currentQuestion].question}
-                             questionId={data[currentQuestion]._id}
-                             />
-                              </>
-                             : null
-                          }
-                      </>
-                        </div>
-                      }
-
-                    </div>
-                  }
-                    {/* <!-- Sample Messages --> */}
-                  
-                    {/* <!-- More messages... --> */}           
-            </div>
-            {/* <!-- next buuton -->*/}
+    questions?.question.map((items, key)=>{
+      return (
+        <li  className="turncate cursor-pointer inline-flex lg:flex ">
+          <Button onClick={()=>handleNavigate(key)} className={`${items?._id 
+          === questions?.question[currentQuestion]?._id ? "bg-purple-100 font-semibold text-gray-600" 
+          : "bg-white"}
+           border-[1px] rounded-full lg:rounded-md py-0 lg:py-5 mx-2 my-2
+          md:shadow-none md:border-none inline-flex font-roboto items-center text-[16px]`}>{key + 1}
+           <p className="hidden md:block truncate w-44 2xl:w-[20rem]"> . 
             {
-              show ? <></> : 
-            
-            <div className="bg-white p-4 border-t border-neutral-200">
-                <div className="flex gap-3 justify-center">
-                    {
-                    previous ?  <Button 
-                    className="w-[5rem]
-                    py-2 
-                    rounded-full " 
-                    onClick={handleAnswerOptionClickPrev} 
-                  >previous</Button> : <></>
-                  }
-                    <Button onClick={handleAnswerNext} className="
-                    bg-variation-500 w-[5rem] 
-                    rounded-full
-                     text-white">
-                      next</Button>  
-                </div>
-            </div>
-}
-            {/* buttonnext */}
-        </div>
+              questions.question[currentQuestion].name === "writing" && "Choose the topic"
+            }
+            {
+              questions.question[currentQuestion].name 
+              === "Blank" ? <>{name}</> : <> {items.question}</>
+            }     
+        </p>
+          </Button>
+       </li>
+      )
+      })
+      }
+      </ul>   
     </div>
-      
+
+  {/* task area */}
+    <div className="lg:w-[75%] flex-1 flex flex-col lg:mt-[3.5rem] ">
+      {
+        result ? <div className="flex-1 flex-col h-screen 
+                                 items-center w-full">
+                   <Result
+                  className="font-roboto mt-4"
+                  status={"success"}
+                  title={"click button for go home page"}
+                  subTitle={`please review your answer
+                   before do next section`}
+                  extra={
+                    <div className="flex gap-3 font-roboto justify-center">
+                    <Button className="bg-yellow-400
+                      rounded-full
+                      border-[1px]" onClick={()=> {
+                      handleAnswerNext()
+                      setResult(false)
+                    }
+                      }>Previous</Button>
+                    <Button className="text-white
+                     bg-variation-500 rounded-full border-[1px]" 
+                     onClick={()=>{
+                      navigator(-1 ,{replace : true})
+                      dispatch(questionAction.addReport({
+                       markPoint : toalPoints(),
+                       subjectName : name,
+                       status : statusSection(questions.score)
+                        
+                      }))
+                      
+                      }}>Go to Exam</Button>
+                    </div>
+                  }/> </div> : <>
+<div className=" flex-1 overflow-y-auto ">
+<div className="md:max-w-[80%] px-4 md:px-0 mx-auto">
+<Instruction headers={name}></Instruction>
+<div className="">
+<p className="mx-3 my-3 text-[14px] inline-flex bg-rose-50 rounded-full px-2 py-1.5 ">
+  Desc : {questions.question[currentQuestion]?.description}</p>  
+  <p className="my-3 text-[14px] bg-green-50 text-green-500
+   rounded-full inline-flex px-2 py-1.5">
+  point : {questions.question[currentQuestion]?.point}</p>
+  </div>
+  <>
+  {
+      questions.question[currentQuestion].name === "writing" && <>
+      <h1 className="text-[18px] text-gray-600 font-semibold">Choose the Topic below</h1>
+        <ul className="text-gray-600">
+          {
+          questions.question[currentQuestion]?.options?.map((items,key)=> {
+            return (
+              <li>
+              {key + 1} . {items.value}
+              </li>
+            )
+          })}
+          </ul>
+      <Writing answer={questions.question[currentQuestion]?.userAnswer} 
+      qid={questions.question[currentQuestion]._id}/>
       </>
- : <div className="top-[6rem] relative">
- <Result
-     status="warning"
-    title="No question aviliable"
-    subTitle= {`${subId.state.id}`}
-    extra={
-      <NavigatorButton style="bg-variation-400 text-white rounded-full">
-        Back
-        </NavigatorButton>
-    }
-  />
- </div> 
-}      
-</>
+        }
+      {/* blank question */}
+        {
+          questions.question[currentQuestion].name === "Blank" && <>
+          <ul className="flex flex-wrap-reverse gap-2 my-4 text-gray-600">
+          {
+          questions.question[currentQuestion]?.options?.map((items,key)=> {
+            return (
+              <li className="text-[16px] bg-white px-2 
+              rounded-full py-1.5 border border-gray-300">
+              {key+1}. {items}
+              </li>
+            )
+          })}
+          </ul>
+          {/* {JSON.stringify(questions.question[currentQuestion].correctAnswer)} */}
+          <div className="bg-gray-300 p-[0.5px]"></div>
+          <Form className="mt-5" form={form} onFinish={(value)=> getAnswer(value ,
+             questions.question[currentQuestion]._id , name)} >
+            {replaceWordWithInput(questions.question[currentQuestion]?.options, 
+            questions.question[currentQuestion].question,
+             questions.question[currentQuestion]?._id )}
+          </Form>
+          {/* {JSON.stringify(questions.question[currentQuestion]?.userAnswer)} */}
+          </>
+        }   
+        </>
+          {/* Blank question */}
+          {/* MQC question */}
+        <div>
+          {
+            questions.question[currentQuestion].name === "Mqc" && <>
+              <div>
+             {questions.question[currentQuestion]?.upload && <>
+             <RenderFile 
+                 type={questions.question[currentQuestion].upload?.type}
+               path={questions.question[currentQuestion].upload?.path}
+               />
+              </>}
 
+         </div>
+            <div className="bg-white text-gray-600 p-4 mb-2 rounded-lg shadow-sm">
+             <p className="text-[18px] font-semibold">
+              {currentQuestion+1}.
+              {questions.question[currentQuestion].question}</p>
+             <ul className="my-5 ">
+              {
+                questions.question[currentQuestion]?.options?.
+                map((items, key)=><li className="my-5" key={key}>
+                  <label className="flex">
+                    <input className="w-5 h-5 mx-3 text-[16px]"
+                     checked={items.isSelect}
+                      onChange={(e)=> {
+                      setChecked(!check)
+                      dispatch(questionAction.handleCheckBox({
+                        qid : questions.question[currentQuestion]._id,
+                        title : name,
+                        value : items?.value,
+                        isChecked : check,
+                        currentMarkPoint : calulateScore(questions?.question[currentQuestion].name , 
+                          items.isCorrect,
+                          questions?.question[currentQuestion].point,
+                          e.target.checked,
+                          questions?.question[currentQuestion]?.correctAnswer,
+                          items?.value
+                          )
+                      }))
+                      
+                    }} type="checkbox"></input>
+                    {items.value}
+                  </label>
+                </li>)
+              }
+             </ul>
+             </div>
+            </>
+          }
+        </div>
+     </div>
 
-
-
+   </div>
+   {/* next and previus button */}
+   {
+    questions?.question[currentQuestion]?.name === "writing" ? <></> :
+     <div className="bg-white border-neutral-50 flex justify-center  py-4 gap-3">
+     {
+      previous ? <Button className="bg-yellow-300" onClick={
+        handleAnswerPrev
+      
+      }>previous</Button> : <></>
+     }
+     {
+      questions.question[currentQuestion].name == "Blank" ?<> { 
+          answerBtn ?  <Button onClick={()=>{
+          form.resetFields()
+          setAnswer(false)
+          handleAnswerNext(questions.question[currentQuestion]._id)}}>Next</Button>
+         :<Button onClick={(value)=>{
+          getAnswer(form.getFieldValue(), questions.question[currentQuestion]._id, name,
+           questions?.question[currentQuestion]?.correctAnswer)
+          setAnswer(true)
+         }}>Answer</Button> 
+        
+       } </> :  <Button
+       onClick={handleAnswerNext}>Next</Button> 
+     }
+     </div>
 }
+     </>
+}     
+    </div>
+                 
+            </>  
+                  
+            : <div className="flex w-full   justify-center items-center">
+           <Result
+           status="500"
+          title="404"
+          subTitle="Sorry, the page you visited does not exist."
+          extra={<Button
+                  className="bg-rose-500 text-white"
+                  onClick={()=> navigator(-1 , {replace:true})}
+          >Back Home</Button>}
+            />
+            </div> 
+          }
 
-
+   
+  
+  
+  
+  </div>
+}

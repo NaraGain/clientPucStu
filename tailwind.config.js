@@ -25,12 +25,14 @@ module.exports = {
       "purple-100" :"#f3e8ff", 
       "green-50"    : "#dcfce7",
       "green-800" : "#166534",
+      "navbar"     : "#6052a5",
 
     },
    
     screens: {
+     
       'xs': '480px',
-      
+    
       'sm': '640px',
       // => @media (min-width: 640px) { ... }
 

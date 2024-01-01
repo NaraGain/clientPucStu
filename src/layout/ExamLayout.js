@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import Container from "../components/Container";
-import { Outlet, Link, useParams, useLocation } from "react-router-dom";
+import { Outlet,  useParams, useLocation } from "react-router-dom";
 import Timer from "../components/Timer";
 import Avatar from "../components/Avatar";
 import Cookie from "universal-cookie"
-import { Dropdown, Space, Pagination  } from 'antd';
+import { Dropdown, Space,  } from 'antd';
 import Icon from "../components/Icon";
-import { CiCircleChevLeft,CiExport, CiRuler, CiUser } from "react-icons/ci";
-import { useDispatch, useSelector } from "react-redux";
+import {CiExport,} from "react-icons/ci";
+import { IoIosArrowBack } from "react-icons/io";
+import { useDispatch,  } from "react-redux";
 import { loadingAction } from "../redux/loaderSlice";
 import NavigatorButton from "../components/NavigatorButton";
 
@@ -17,12 +17,7 @@ export function ExamLayout(){
     const [change , setChange] = useState(false)
     const names = useParams()
     const path = useLocation()
-    const username = cookies.get('studentname')
-    const dispatch = useDispatch()
-    const [current, setCurrent] = useState(1);
-
- 
-
+    
   const mousDown = () =>{
    setChange(true)
   }
@@ -34,22 +29,20 @@ export function ExamLayout(){
    
   }
 
-  console.log(path)
-
-
     return <>
-        <nav className="m-0  top-0 bg-variation-500 text-white bg-repeat bg-auto 
-        shadow-sm shadow-neutral-200 fixed w-full z-10">
+        <nav className={`m-0  top-0 bg-purple-100
+         text-white bg-repeat bg-auto 
+          fixed w-full z-10`}>
         <div className="relative  px-4 md:top-0 
-        md:py-3 py-4 m-0  text-slate-900 flex justify-between md:items-center 
+        md:py-2 py-4 m-0  text-slate-900 flex justify-between md:items-center 
         tracking-wider "> 
         <span className="flex items-center gap-3 cursor-pointer">
             {
                 path.pathname === "/exam"  || names.name ? <>
                  {
                 change ? <div onMouseUp={mousUp}>
-                    <NavigatorButton style={"rounded-full px-2 bg-white"}>
-                     <Icon color={"black"} name={<CiCircleChevLeft/>} Size={"1.2rem"}/>
+                    <NavigatorButton style={"rounded-md px-2 bg-none border-none shadow-none"}>
+                     <Icon color={"black"} name={<IoIosArrowBack />} Size={"1.2rem"}/>
                      </NavigatorButton>
                     </div>
                  :   <img onMouseMove={mousDown} 
@@ -58,15 +51,13 @@ export function ExamLayout(){
                 </> :<img onMouseMove={mousDown} 
                  className="w-[2.5rem] h-[2.5rem]" src="./asset/Puc_logo.png" alt="logo"/>
         } 
-            <h1 className="font-semibold text-[18px]">Oxam</h1>
+            <h1 className="font-semibold text-[18px] text-variation-500">Oxam</h1>
         </span>
             {
              names.name  ?<div className="overflow-hidden md:block"> </div> : null
             }
         <div className="flex space-x-1 items-center">
-            {
-                path.pathname === "/exam" || names.name ? <Timer></Timer> :<></>
-            }
+            <Timer></Timer> 
             <>
             <AvatarUser/>
         </>
@@ -75,16 +66,8 @@ export function ExamLayout(){
         </nav>
         <main className="top-0  relative w-full ">
         <Outlet/>
-        </main>
-           
-    
-        
-        
+        </main>   
  </>
-
-
-
-
 }
 export const AvatarUser = () => {
     const dispatch = useDispatch()
@@ -92,6 +75,9 @@ export const AvatarUser = () => {
     const logout = (e) =>{
         cookies.remove("STUDENTTOKEN",{path : "/"})
         cookies.remove('studentname')
+        cookies.remove('stuId')
+        localStorage.removeItem('attempts')
+        localStorage.removeItem('questionStorage')
         dispatch(loadingAction.ShowLoading())
         window.location.href= "/login"
         dispatch(loadingAction.HideLoading())

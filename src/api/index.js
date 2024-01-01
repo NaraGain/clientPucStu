@@ -4,7 +4,6 @@ import Cookies from "universal-cookie";
 
 
 const cookie = new Cookies()
-
 const axiosInstance = axios.create({
     baseURL : process.env.REACT_APP_API_KEY,
     headers : {

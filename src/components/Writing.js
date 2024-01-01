@@ -1,52 +1,62 @@
 import React, { useEffect, useState } from "react";
-import axios, { formToJSON } from 'axios';
-import { TextArea } from "./textArea";
 import Aos from "aos"
 import 'aos/dist/aos.css'
 import { UploadOutlined } from '@ant-design/icons';
-import { Button ,Upload, message ,Input, Form} from 'antd';
-import { useParams } from "react-router-dom";
-import { useForm } from "antd/es/form/Form";
+import { Button ,Upload, message ,Input, Form, Tabs} from 'antd';
+import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { questionAction } from "../redux/questionSlice";
+import axiosInstance from "../api";
+import { loadingAction } from "../redux/loaderSlice";
 
 
 
 
-export default function Writing ({e_id , user_id}){
-const [stateChange ,setState] = useState(false)
+export default function Writing ({qid, answer}){
+const [disable ,setDisable] = useState(false)
 const [fileList, setFileList] = useState([]);
 const [uploading, setUploading] = useState(false);
 const [text ,setText] = useState('')
 const [wordCount ,setWordCount] = useState(0)
-const {name} = useParams()
+const location = useLocation()
+const searchParams = new URLSearchParams(location.search)
+const name = searchParams.get('name')
 const [form] = Form.useForm();
 const {TextArea} = Input
 const dispatch = useDispatch()
-const handleUpload = () => {
+
+
+
+//handle upload file writing function
+const handleUpload = async () => {
   const formData = new FormData();
   fileList.forEach((file) => {
     formData.append('file', file);
-    console.log(file)
   });
   setUploading(true);
-
-  axios.post(`${process.env.REACT_APP_API_KEY}report/upload`, formData)
+  await axiosInstance.post(`${process.env.REACT_APP_API_KEY}report/upload`, formData)
     .then((res) => {
+      dispatch(loadingAction.ShowLoading())
       setFileList([]);
       dispatch(questionAction.addWritingToReport({
         subjectName : name,
         formData : res.data.path
 
       }))
+      dispatch(questionAction.handleChangeBlank({
+        qid : qid,
+        title : name,
+        answer : `${process.env.REACT_APP_API_KEY}`+res.data.path
+      }))
       message.success('upload successfully.');
+      dispatch(loadingAction.HideLoading())
     })
     .catch((error) => {
-      console.log(error.response)
       message.error(error.response.data);
     })
     .finally(() => {
       setUploading(false);
+      dispatch(loadingAction.HideLoading())
     });
 };
 
@@ -70,8 +80,19 @@ const recalculate = (e) => {
 };
 
 
+//function that store student wirting by handle in state
 const handleChangeWritingAsText =(value)=>{
   dispatch(questionAction.addWritingToReport(value))
+  dispatch(questionAction.handleChangeBlank({
+    qid : qid,
+    title : name,
+    answer : value
+  }))
+}
+
+//function fill form
+const handeFillForm = (value) =>{
+  form.setFieldsValue(value)
 }
 
 useEffect(()=>{
@@ -84,24 +105,62 @@ useEffect(()=>{
   })
   setWordCount(wordCount)
    Aos.init({duration:2000})
- },[text])
+   if(answer){
+     handeFillForm(answer)
+     setDisable(true)
+   }
+ },[text , handeFillForm])
+const items = [
+  {
+    key: '1',
+    label: 'Writing',
+    children:  <div className="my-5">
+    <p className="text-end text-[16px]
+font-sans text-gray-600">{wordCount}/200</p>
+<Form
+name = "wirtingform"
+form={form}
+onFinish={handleChangeWritingAsText}
+>
+<Form.Item name={"formData"}>
+<TextArea
+    placeholder="write here"
+    maxLength={200}
+    rows={7}
+    spellCheck={false}
+    onChange={(e)=>{recalculate(e)}}
+    onPaste={(e)=> {
+      e.preventDefault()
+      message.error("could not pass text")
+      }}/>
+</Form.Item>
+<div className="flex justify-between">
+<Form.Item className="m-0 p-0" initialValue={name}
+name={"subjectName"}></Form.Item>
+<Form.Item className="flex justify-end">
+<Button
+disabled={disable}
+className="bg-variation-500 text-white"  
+htmlType="submit">Submit</Button>
+</Form.Item>
+      </div>
+</Form>
  
-    return <div className="bg-white p-4 
-     mt-2 rounded-md border-[1px] border-neutral-200">
-         <div className="w-full h-[2rem] space-x-4 mt-3  tracking-wider">
-   <button className={styleWriting.switchBtn}
-    onClick={()=> setState(!stateChange)}>
-     {stateChange ? "Write" : "upload file"}
-   </button>
-</div>
-    {
-   stateChange ? <div className="mt-4 relative w-full " dat-aos= "fade-up">
+    </div> 
+  },
+  {
+    key: '2',
+    label: 'Upload File',
+    children: <>
+    <div className="mt-4 py-5 relative">
     <>
-      <Upload {...props}   listType="picture-circle">
+      <Upload 
+      {...props}
+      listType="picture-circle">
         <Button icon={<UploadOutlined />}></Button>
       </Upload>
       <Button
-        className="bg-variation-500 text-white rounded-full"
+        className="bg-variation-500 text-white "
         onClick={handleUpload}
         disabled={fileList.length === 0}
         loading={uploading}
@@ -113,54 +172,18 @@ useEffect(()=>{
       </Button>
     </>
     <br />
-            </div> : <div className="my-5">
-            <p className="text-end text-[16px]
-    font-sans text-gray-600">{wordCount}/200</p>
-    <Form
-    name = "wirtingform"
-    form={form}
-    onFinish={handleChangeWritingAsText}
-    >
-      <Form.Item name={"formData"}>
-      <TextArea
-            placeholder="write here"
-            maxLength={200}
-            rows={5}
-            spellCheck={false}
-            onChange={(e)=>{recalculate(e)}}
-            onPaste={(e)=> {
-              e.preventDefault()
-              message.error("could not pass text")
-              }}/>
-      </Form.Item>
-      <Form.Item className="" initialValue={name}
-       name={"subjectName"}></Form.Item>
-      <Form.Item>
-      <Button
-       className="bg-variation-500 w-full text-white"  
-       htmlType="submit">Submit</Button>
-      </Form.Item>
-    </Form>
-         
             </div> 
-         }
+    </>,
+  },
+ ]
 
 
+
+ 
+    return <div className="bg-white px-4 shadow-sm 
+     my-4 rounded-lg lg:border-none border-[1px] border-neutral-200">
+      <Tabs defaultActiveKey="1" items={items}></Tabs>
      </div>
  
 }
 
-const styleWriting = {
-   "main" : "rounded-lg w-full  space-y-2 h-[100%]",
-   "container" : "w-full shadow-gray-500/100 rounded-xl",
-   "divtag2" : "",
-   "divtag3 " : "bg-white rounded-t-lg ",
-   "divtag4" : " flex pl-0 space-x-1 sm:pl-2",
-   "textarea" : "w-full rounded-lg tracking-widest text-sm border-[1px] border-gray-300 border-dashed text-gray-900 bg-white p-2  ",
-   "divtag5" : "flex items-center justify-between px-3 mt-1  ",
-   "btn-style" : " inline-flex items-center py-2 px-4 text-xs font-medium text-center "
-   +" text-white bg-purple-800 rounded-[4px] focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800",
-   "label-style" : "inline-flex justify-center cursor-pointer p-2 ",
-   "input-style" : " ", 
-   "switchBtn" : "max-w-sm px-2 tracking-wide py-1.5 text-[14px] bg-neutral-50 border border-neutral-200 rounded-lg hover:bg-gray-50 text-gray-800 ",   
-}
