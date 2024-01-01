@@ -54,8 +54,8 @@ const loading = useSelector((state)=> state.loader.loading)
       <Outlet></Outlet>
      </>}>
      <Route path='/file' errorElement={<ErrorPage/>} element ={<File/>}></Route>
-     <Route path='/file/:name' rrorElement={<ErrorPage/>} element ={<Render/>}></Route>  
-    <Route path='/file/test' rrorElement={<ErrorPage/>} element ={<ExamTest/>}></Route>  
+     <Route path='/file/:name' errorElement={<ErrorPage/>} element ={<Render/>}></Route>  
+    // <Route path='/file/test' errorElement={<ErrorPage/>} element ={<ExamTest/>}></Route>  
      </Route>
    
 
