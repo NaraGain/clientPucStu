@@ -12,7 +12,6 @@ import { GetHelpWithSigning } from './page/login/resetAccount'
 import { ExamLayout } from './layout/ExamLayout'
 import  Exam from "./page/exam/exam"
 import Main from './page/main/main';
-import ExamTest from './test/ExamTest';
 const LazyLoader = React.lazy(()=> import("./layout/ExamLayout"))
 
 
@@ -53,8 +52,7 @@ const loading = useSelector((state)=> state.loader.loading)
       <Outlet></Outlet>
      </>}>
      <Route path='/file' errorElement={<ErrorPage/>} element ={<File/>}></Route>
-     <Route path='/file/:name' rrorElement={<ErrorPage/>} element ={<Render/>}></Route>  
-    <Route path='/file/test' rrorElement={<ErrorPage/>} element ={<ExamTest/>}></Route>  
+     <Route path='/file/:name' errorElement={<ErrorPage/>} element ={<Render/>}></Route>  
      </Route>
    
 
