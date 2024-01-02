@@ -17,7 +17,6 @@ const LoginForm = () => {
 
     
     const handleSubmit = async (e) => {
-        e.preventDefault()
         try {
             dispatch(loadingAction.ShowLoading())
             const response = await login({
