@@ -31,8 +31,6 @@ const loading = useSelector((state)=> state.loader.loading)
   return <div className='App'>
  { loading && <><Loader/></>}  
 <Routes>
-
-      <Route path="/" element={<LoginForm/>}></Route>
       <Route path='/login' element={<LoginForm/>}/> 
       <Route path='/login/reset-account' element={<GetHelpWithSigning/>}/>
     
