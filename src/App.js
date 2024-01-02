@@ -31,17 +31,15 @@ const loading = useSelector((state)=> state.loader.loading)
   return <div className='App'>
  { loading && <><Loader/></>}  
 <Routes>
-
-      <Route path="/" element={<LoginForm/>}></Route>
       <Route path='/login' element={<LoginForm/>}/> 
       <Route path='/login/reset-account' element={<GetHelpWithSigning/>}/>
     
       
     <Route path='/'  errorElement={<ErrorPage/>} 
     element={<ProtectedRoute><ExamLayout/></ProtectedRoute>} >
-      <Route path='/main' element={<ProtectedRoute><Main/></ProtectedRoute>}/>
-      <Route path='/exam' element={<ProtectedRoute><Exam/></ProtectedRoute>}></Route>
-      <Route path='/exam/:name' element={<ProtectedRoute><QuestionRender/></ProtectedRoute>}></Route>
+      <Route path='/main' element={<Main/>}/>
+      <Route path='/exam' element={<Exam/>}></Route>
+      <Route path='/exam/:name' element={<QuestionRender/>}></Route>
       </Route>
     {/* Error page not found */}
     <Route path='/*' element={<ErrorPage ></ErrorPage>}/>
