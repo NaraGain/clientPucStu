@@ -27,7 +27,7 @@ import { SubmitReport } from './Submit';
     const formRef = useRef(null)
 
     useEffect(()=>{
-        const sockectInstance = io()
+        const sockectInstance = io(`${process.env.REACT_APP_API_KEY}`)
         setSocket(sockectInstance)
         sockectInstance.on('countdown', 
         ({minutes , remainingSeconds})=> { 

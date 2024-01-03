@@ -12,7 +12,6 @@ import { GetHelpWithSigning } from './page/login/resetAccount'
 import { ExamLayout } from './layout/ExamLayout'
 import  Exam from "./page/exam/exam"
 import Main from './page/main/main';
-import ExamTest from './test/ExamTest';
 const LazyLoader = React.lazy(()=> import("./layout/ExamLayout"))
 
 
@@ -32,18 +31,15 @@ const loading = useSelector((state)=> state.loader.loading)
   return <div className='App'>
  { loading && <><Loader/></>}  
 <Routes>
-
-     <Route path="/" element={<LoginForm/>}></Route>
-      <Route path='/login'
-      element={<LoginForm/>}/> 
+      <Route path='/login' element={<LoginForm/>}/> 
       <Route path='/login/reset-account' element={<GetHelpWithSigning/>}/>
     
       
     <Route path='/'  errorElement={<ErrorPage/>} 
     element={<ProtectedRoute><ExamLayout/></ProtectedRoute>} >
-      <Route path='/main' element={<ProtectedRoute><Main/></ProtectedRoute>}/>
+      <Route path='/main' element={<Main/>}/>
       <Route path='/exam' element={<Exam/>}></Route>
-      <Route path='/exam/:name' element={<QuestionRender/> }></Route>
+      <Route path='/exam/:name' element={<QuestionRender/>}></Route>
       </Route>
     {/* Error page not found */}
     <Route path='/*' element={<ErrorPage ></ErrorPage>}/>
@@ -54,8 +50,7 @@ const loading = useSelector((state)=> state.loader.loading)
       <Outlet></Outlet>
      </>}>
      <Route path='/file' errorElement={<ErrorPage/>} element ={<File/>}></Route>
-     <Route path='/file/:name' rrorElement={<ErrorPage/>} element ={<Render/>}></Route>  
-    <Route path='/file/test' rrorElement={<ErrorPage/>} element ={<ExamTest/>}></Route>  
+     <Route path='/file/:name' errorElement={<ErrorPage/>} element ={<Render/>}></Route>  
      </Route>
    
 
