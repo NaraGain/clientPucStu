@@ -23,9 +23,11 @@ module.exports = {
       "rose-500" : "#f43f5e",
       "slate-800" : "#1e293b",
       "purple-100" :"#f3e8ff", 
+      "purple-200" : "#c084fc",
       "green-50"    : "#dcfce7",
       "green-800" : "#166534",
       "navbar"     : "#6052a5",
+
 
     },
    

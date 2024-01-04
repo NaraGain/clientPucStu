@@ -4,7 +4,7 @@ import axiosInstance from ".";
 
 export const Groups = async (payload) => {
     try {
-        const response = await axiosInstance.post(`group/student/query`,payload)
+        const response = await axiosInstance.post(`student/groups`,payload)
         return response.data
     } catch (error) {
         return error.response.data

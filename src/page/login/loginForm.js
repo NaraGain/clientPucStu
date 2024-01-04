@@ -1,10 +1,9 @@
-import React, { useEffect, useState,useRef } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import React, { useState} from "react"
+import { Link} from "react-router-dom"
 import "../../style/style.css"
 import Cookies from "universal-cookie"
 import { useDispatch } from "react-redux"
-import { authAction } from "../../redux/authSlice"
-import { Input, Form,message} from "antd"
+import { Input,message} from "antd"
 import { loadingAction } from "../../redux/loaderSlice"
 import { login } from "../../api/user"
 
@@ -34,12 +33,9 @@ const LoginForm = () => {
                cookie.set('stuId', response?.id)
               window.location.href = `/main?group=${encodedString}`
             }else{
-               message.error('something is wrong')
-                
-            }
-            
-           
-
+               message.error(response.message)
+               alert(response.message)  
+            }      
         } catch (err) {
             message.error(err)
         }
@@ -99,8 +95,6 @@ return  <div className="flex items-center bg-login min-h-screen font-roboto">
                 </button>
                 </div>
                 </form>
-    
-
             </div>
 
         </div>

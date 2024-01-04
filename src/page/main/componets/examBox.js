@@ -11,10 +11,6 @@ import { updateExamOnfinish } from '../../../api/exam'
 export const ExamBox = ({exam, currentDate , group}) => {
     const findExamId = exam.find((i)=>
     moment(i.date).format('LL') == moment(currentDate).format('LL'))
-    const [timeObject , setTimeObject] = useState({
-        start : group ? group[0] : 0,
-        end    : group ? group[1] : 1
-    })
    
 
     const updateExamToOnFinish = async (id ,value , interval) => {
@@ -36,30 +32,17 @@ export const ExamBox = ({exam, currentDate , group}) => {
         }
       }
 
-        const filtered = exam.filter((items , key)=> {
-        const examDate = moment(items?.date).format("DD/MM/YYYY")
-            const dateToFilter = moment(currentDate).format("DD/MM/YYYY")
-            const currentTime = new Date(currentDate)
-            const examTime = new Date(items?.time)
-
-            return examDate === dateToFilter && 
-            examTime.getHours() === currentTime.getHours()
-            && currentTime.getMinutes() <= 59
-             && items.onfinish == false
-          })
 
 useEffect(()=>{
        const endTime = new Date(findExamId?.time)
        //handle update with time is up
         const interval = setInterval(()=> {
             if(currentDate.getHours() === endTime.getHours() 
-            && currentDate.getMinutes() >= findExamId?.duration ){
+            && currentDate.getMinutes() >= findExamId?.duration-1 ){
             updateExamToOnFinish( findExamId._id,{
                onfinish: true,
                description : 'exprire date',
-            },
-            interval
-            )
+            }, interval)
             }else{
               // message.error(findExamId?._id)
             }
@@ -71,26 +54,26 @@ useEffect(()=>{
        
    return <>
           {
-            filtered ? null : <p className='text-gray-600 text-[14px]
+            exam ? null : <p className='text-gray-600 text-[14px]
              bg-yellow-50 rounded-full px-4 py-1.5'>exam are not available</p>
           }
           {
-            filtered.map((exams, key)=><Form key={key}>
+            exam.map((exams, key)=><Form key={key}>
                <Link to={`/exam?id=${exams._id}`}>
-            <button className=" border-neutral-200
+            <button className=" mt-4 border-neutral-200
             active:bg-neutral-50
-             border text-gray-600
+             border-[2px] text-gray-600
              px-5  py-2 rounded-xl">
               <div className="flex justify-end">
               <Icon color={exams?.onfinish ? "green" : "blue"} 
               Size={"1rem"} name={<IoEllipse/>}></Icon>
               </div>
-              <div className="py-6">
+              <div className="pb-6 py-2 font-roboto text-[16px]">
               {exams.name}
               <div className="w-[4rem]​​ ​ h-[4rem] my-4">
-                <Icon name={<CiReceipt/>}/>
+                <Icon color={"#0f3460"} name={<CiReceipt/>}/>
               </div>
-            <p>Exam_Time {moment(exams?.time).format('LT')}</p>  
+            <p>exam {moment(exams?.time).format('LT')}</p>  
               </div> 
              </button>
             </Link>

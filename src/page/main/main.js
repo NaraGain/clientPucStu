@@ -15,6 +15,7 @@ export default function Main () {
 
     const [data ,setData] = useState()
     const [exam ,setExam] = useState([])
+    const [student ,setStudent] = useState([])
     const location = useLocation()
     const group = new URLSearchParams(location.search)
     const name = group.get('group')
@@ -31,11 +32,11 @@ export default function Main () {
           courseName : course
         })
         dispatch(loadingAction.HideLoading())
+        console.log(response)
         if(response.success){
           setData(response.result)
-          setExam(response.result.exam)
-          const findExamId = response.result.exam.find((i)=>
-           moment(i.date).format('LL') == moment(currentDate).format('LL'))
+          setExam(response.exam)
+          setStudent(response.student)
         }else{
           message.error(response.message)
         }
@@ -53,7 +54,7 @@ export default function Main () {
 
 
 
-    return <div className="flex bg-login flex-col  text-gray-600 items-center
+    return <div className="flex bg-login flex-col p-5  text-gray-600 items-center
      justify-center w-full md:overflow-hidden h-screen font-roboto">
             <div className="space-y-2 px-3  ">
               <div className="flex justify-center">
