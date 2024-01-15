@@ -157,9 +157,9 @@ const statusSection = (fullScore) =>{
     let point = toalPoints()
     let result =  fullScore / 2
     if(point <= result){
-      status = "failed"
+      status = "FAILED"
     }else{
-      status = "pass"
+      status = "PASS"
     }
     return status
 }
@@ -234,20 +234,21 @@ useEffect(()=> {
                   extra={
                     <div className="flex gap-3 font-roboto justify-center">
                     <Button className="bg-yellow-400
-                      rounded-full
+                      
                       border-[1px]" onClick={()=> {
                       handleAnswerNext()
                       setResult(false)
                     }
                       }>Previous</Button>
                     <Button className="text-white
-                     bg-variation-500 rounded-full border-[1px]" 
+                     bg-variation-500  border-[1px]" 
                      onClick={()=>{
                       navigator(-1 ,{replace : true})
                       dispatch(questionAction.addReport({
                        markPoint : toalPoints(),
                        subjectName : name,
-                       status : statusSection(questions.score)
+                       sectionScore : questions?.score,
+                       status : statusSection(questions?.score)
                         
                       }))
                       
@@ -278,7 +279,7 @@ useEffect(()=> {
             )
           })}
           </ul>
-      <Writing answer={questions.question[currentQuestion]?.userAnswer} 
+      <Writing score={questions?.score} answer={questions.question[currentQuestion]?.userAnswer} 
       qid={questions.question[currentQuestion]._id}/>
       </>
         }
@@ -350,7 +351,7 @@ useEffect(()=> {
                       }))
                       
                     }} type="checkbox"></input>
-                    {items.value}
+                   {key + 1} . {items.value}
                   </label>
                 </li>)
               }

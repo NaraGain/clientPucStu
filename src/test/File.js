@@ -28,7 +28,21 @@ export const File = ()=> {
         })
         console.log(response)
         if(response.success){
-          dispatch(questionAction.addQuestion({question : response.result}))
+          function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+          }   
+          const randomizedData = response.result.map((exam) => ({
+            ...exam,
+            question: exam.question.map((q) => ({
+              ...q,
+              options: shuffleArray(q.options.map((option) => ({ ...option }))),
+            })),
+          }));
+          dispatch(questionAction.addQuestion({question : randomizedData}))
           message.success('fetch data')
         }else{
           message.error(response.message)
@@ -47,7 +61,29 @@ export const File = ()=> {
         }).then((response)=> 
         { 
           message.success(response.data.message)
-          dispatch(questionAction.addQuestion({question : response.data.result}))
+          function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+          }   
+          const randomizedData = response.data.result.map((exam) => ({
+            ...exam,
+            question: exam.question.map((q)=> {
+              if(q.name === 'Mqc'){
+                return {
+                  ...q,
+                  options : shuffleArray(q.options.map((options)=> ({...options})))
+                }
+              }else{
+                return {
+                  ...q,
+                }
+              }
+            })
+          }));
+          dispatch(questionAction.addQuestion({question :randomizedData}))
           setData(response.data.result)
         })
     }

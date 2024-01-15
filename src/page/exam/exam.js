@@ -27,6 +27,17 @@ const userId = cookie.get('stuId')
 
 // console.log(report)
 // function api getGetExam
+
+//function random question of options
+const shuffleArray = (array)=> {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+//getExam function//
 const onGetExam = async (e)=>{
   try {
     dispatch(loadingAction.ShowLoading())
@@ -35,8 +46,26 @@ const onGetExam = async (e)=>{
     })
     dispatch(loadingAction.HideLoading())
     if(response.success){
+      //start random options question
+      const randomizedData = response.result.map((exam) => ({
+        ...exam,
+        question: exam.question.map((q)=> {
+          if(q.name === 'Mqc'){
+            return {
+              ...q,
+              options : 
+              shuffleArray(q.options.map((options)=> ({...options})))
+            }
+          }else{
+            return {
+              ...q,
+            }
+          }
+        })
+      }));
+      //dispatch into redux state (questionslice) //
       dispatch(questionAction
-        .addQuestion({question : response.result}))
+        .addQuestion({question : randomizedData}))
     }else{
       message.error(response.message)
     }
@@ -65,7 +94,8 @@ useEffect(()=>{
   }))
   Aos.init({duration:500})
   window.addEventListener('beforeunload', handleBeforeUnload)
-  return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  return () => window
+  .removeEventListener('beforeunload', handleBeforeUnload)
 },[location.search])
 
 

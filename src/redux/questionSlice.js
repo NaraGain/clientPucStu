@@ -106,6 +106,7 @@ const questionSlice = createSlice ({
                 const data = {
                     markPoint : action.payload.markPoint,
                     subjectName : action.payload.subjectName,
+                    sectionScore : action.payload.sectionScore,
                     status : action.payload.status
                 }
                 const arr = []
@@ -126,6 +127,7 @@ const questionSlice = createSlice ({
             addWritingToReport : (state,action)=>{
                 const dataWriting = {
                     subjectName : action.payload.subjectName,
+                    sectionScore : action.payload.sectionScore,
                     formData : action.payload.formData,
                 }
 

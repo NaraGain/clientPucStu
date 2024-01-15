@@ -12,7 +12,7 @@ import { loadingAction } from "../redux/loaderSlice";
 
 
 
-export default function Writing ({qid, answer}){
+export default function Writing ({score ,qid, answer}){
 const [disable ,setDisable] = useState(false)
 const [fileList, setFileList] = useState([]);
 const [uploading, setUploading] = useState(false);
@@ -40,7 +40,8 @@ const handleUpload = async () => {
       setFileList([]);
       dispatch(questionAction.addWritingToReport({
         subjectName : name,
-        formData : res.data.path
+        formData : res.data.path,
+        sectionScore : score,
 
       }))
       dispatch(questionAction.handleChangeBlank({
