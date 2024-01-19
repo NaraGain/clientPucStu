@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {useLocation, useNavigate } from "react-router-dom";
 import { questionAction } from "../../../redux/questionSlice";
-import { Button, Form, Input, Result } from "antd";
+import { Button, Form, Input, Result, FloatButton, Tooltip } from "antd";
 import Writing from "../../../components/Writing";
 import Instruction from "../../../components/Instruction";
 import { RenderFile } from "./RenderFile";
@@ -182,28 +182,33 @@ useEffect(()=> {
   return <div className="flex flex-col lg:flex-row w-full h-screen font-roboto">
           {
             questions ? <>
-              <Button className="md:block hidden  mt-[3.7rem] border-none fixed shadow-none z-10" 
-     onClick={handletoggleCollapsed}>
-      { collapsed ? <Icon Size={"1.3rem"} name={<CiCircleChevRight/>}/>:<Icon Size={"1.3rem"} 
-      name={<CiCircleChevLeft/>}/>}</Button>
+            <Tooltip title="expand the screen">
+              <FloatButton 
+              style={{
+                right: 164,
+              }}
+              icon={ collapsed ? <CiCircleChevRight/> : <CiCircleChevLeft/>}  
+              type="primary"
+              className="md:block hidden border-none fixed shadow-none z-10" 
+            onClick={handletoggleCollapsed}/>
+            </Tooltip>
     <div className={`${collapsed ? "w-0 transition-transform duration-100 ease-out" 
-    : "lg:w-1/5 2xl:w-[20%]"}  lg:bg-white mt-0 overflow-y-auto`}>
-      <div className=" border-b border-neutral-200 mt-[3.5rem] lg:block hidden 
-      transition-transform duration-500 ease-in-out">
-    <p className="hidden overflow-x-auto 
-    py-2 mx-[5rem] lg:block font-roboto">Progress {questions.progress}</p>
+    : "lg:w-1/5 2xl:w-[20%]"} bg-white mt-0 overflow-y-auto`}>
+      <div className=" mt-[3.5rem] lg:block hidden">
+    <p className="hidden text-start 
+    py-2 p-2 bg-yellow-50  lg:block font-roboto">Progress {questions.progress}</p>
       </div>
       <ul className="mt-[4.5rem]   overflow-x-auto lg:mt-0 lg:flex-col flex justify-center">
     {
     questions?.question.map((items, key)=>{
       return (
         <li  className="turncate cursor-pointer inline-flex lg:flex ">
-          <Button onClick={()=>handleNavigate(key)} className={`${items?._id 
+          <button onClick={()=>handleNavigate(key)} className={`${items?._id 
           === questions?.question[currentQuestion]?._id ? "bg-purple-100 font-semibold text-gray-600" 
           : "bg-white"}
-           border-[1px] rounded-full lg:rounded-md py-0 lg:py-5 mx-2 my-2
+           border-[1px] w-full rounded-full truncate lg:rounded-md py-0 lg:py-2 mx-2 px-2
           md:shadow-none md:border-none inline-flex font-roboto items-center text-[16px]`}>{key + 1}
-           <p className="hidden md:block truncate w-44 2xl:w-[20rem]"> . 
+           <p className="hidden md:block w-full truncate"> . 
             {
               questions.question[currentQuestion].name === "writing" && "Choose the topic"
             }
@@ -212,7 +217,7 @@ useEffect(()=> {
               === "Blank" ? <>{name}</> : <> {items.question}</>
             }     
         </p>
-          </Button>
+          </button>
        </li>
       )
       })
@@ -221,7 +226,7 @@ useEffect(()=> {
     </div>
 
   {/* task area */}
-    <div className="lg:w-[75%] flex-1 flex flex-col lg:mt-[3.5rem] ">
+    <div className="lg:w-[75%] flex-1 flex flex-col lg:mt-[3.5rem]">
       {
         result ? <div className="flex-1 flex-col h-screen 
                                  items-center w-full">

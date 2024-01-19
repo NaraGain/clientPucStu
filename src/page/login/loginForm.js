@@ -10,7 +10,7 @@ import { login } from "../../api/user"
 const cookie = new Cookies
 
 const LoginForm = () => {
-    const [username , setUsername] = useState("Oxam")
+    const [username , setUsername] = useState("to PUCIFL")
     const [password,setPassword] = useState()
     const dispatch = useDispatch()
 
@@ -42,7 +42,7 @@ const LoginForm = () => {
     }
 
 return  <div className="flex items-center bg-login min-h-screen font-roboto">
-<div className="flex-1 h-full max-w-md mx-auto bg-none md:bg-white">
+<div className="flex-1 h-full max-w-md mx-auto bg-none">
     <div className="flex justify-center items-center">
     <img className="w-[3rem] h-[3rem]"  src="./asset/Puc_logo.png"></img>
     </div>
@@ -51,7 +51,7 @@ return  <div className="flex items-center bg-login min-h-screen font-roboto">
             <div className ="w-full px-4  md:px-0">
             <div className="text-purple-900 space-y-1   text-center">
                 <h1 className=" text-[24px] font-roboto ">
-                 Welcome to {username}
+                 Welcome  {username}
                 </h1>
                 <p className="text-[16px] text-gray-600 font-roboto"> 
                 Login to Your student account

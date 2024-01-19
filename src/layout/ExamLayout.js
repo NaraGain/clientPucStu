@@ -30,7 +30,7 @@ export function ExamLayout(){
   }
 
     return <>
-        <nav className={`m-0  top-0 bg-purple-100
+        <nav className={`m-0  top-0 bg-white border-b border-neutral-200
          text-white bg-repeat bg-auto 
           fixed w-full z-10`}>
         <div className="relative  px-4 md:top-0 
@@ -76,6 +76,7 @@ export const AvatarUser = () => {
         cookies.remove("STUDENTTOKEN",{path : "/"})
         cookies.remove('studentname')
         cookies.remove('stuId')
+        cookies.remove('course')
         localStorage.removeItem('attempts')
         localStorage.removeItem('questionStorage')
         dispatch(loadingAction.ShowLoading())

@@ -8,6 +8,7 @@ const reportSlice = createSlice({
     initialState : {
         'user' : "",
         'exam' : "",
+        'course': "",
         'result' : {},
 
     },
@@ -15,6 +16,7 @@ const reportSlice = createSlice({
             addReportToDb:(state ,actions)=>{
                 state.user = actions.payload.user
                 state.exam = actions.payload.exam
+                state.course = actions.payload.course
                 state.result = actions.payload.result
             }
     },

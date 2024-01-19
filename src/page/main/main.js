@@ -50,11 +50,13 @@ export default function Main () {
 
     useEffect(()=> {
         handleOnGet()
-    },[location.search])
+        cookie.set('course', data?._id)
+    },[location.search , data?._id])
 
 
 
-    return <div className="flex bg-login flex-col p-5  text-gray-600 items-center
+    return <div className="overflow-y-auto">
+       <div className="flex bg-login flex-col p-5  text-gray-600 items-center
      justify-center w-full md:overflow-hidden h-screen font-roboto">
             <div className="space-y-2 px-3  ">
               <div className="flex justify-center">
@@ -81,6 +83,7 @@ export default function Main () {
              </div>          
             </div>
             <ExamBox group={data?.time} exam={exam} currentDate={currentDate}/>
+    </div>
     </div>
 }
 

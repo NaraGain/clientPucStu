@@ -24,8 +24,9 @@ const exam = new URLSearchParams(location.search)
 const examId = exam.get('id')
 const cookie = new Cookies()
 const userId = cookie.get('stuId')
+const courseId = cookie.get('course')
 
-// console.log(report)
+console.log(report)
 // function api getGetExam
 
 //function random question of options
@@ -90,6 +91,7 @@ useEffect(()=>{
   dispatch(reportAction.addReportToDb({
     user : userId,
     exam : examId,
+    course : courseId,
     result : reportsQueston, 
   }))
   Aos.init({duration:500})

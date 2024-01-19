@@ -6,7 +6,6 @@ import { CiChat2,CiCircleQuestion, CiEdit,
 import { IoEllipse} from "react-icons/io5";
 import { useSelector } from "react-redux"
 import {Tag} from "antd"
-import { useState } from "react"
 
 
 export function QuizCard ({title,desc,examId,number,link,
@@ -23,7 +22,7 @@ const disableLink = useSelector(state => state.question.timeOut)
       return <CiText/>
     }else if (names === "GRAMMAR"){
       return  <CiChat2/>
-    }else if (names === "LISTENNING"){
+    }else if (names === "LISTENING"){
       return <CiHeadphones/>
     }
     else{

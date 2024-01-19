@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { questionAction } from '../redux/questionSlice';
 import axios from 'axios';
-import { message } from 'antd';
+import { message,  Button, Table  } from 'antd';
 import axiosInstance from '../api';
 import { Link, Outlet } from 'react-router-dom';
 import Cookies from 'universal-cookie';
@@ -13,6 +13,7 @@ export const File = ()=> {
   const question = useSelector(state => state.question.subject)
   const report = useSelector(state => state.question.report)
   const cookie = new Cookies()
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   
   const handleBeforeUnload = (event)=>{
     localStorage.setItem('questionStorage',JSON.stringify(question))
@@ -96,10 +97,43 @@ export const File = ()=> {
 
   }, [])
  
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+    },
+    {
+      title: 'Age',
+      dataIndex: 'age',
+    },
+    {
+      title: 'Address',
+      dataIndex: 'address',
+    },
+  ];
+  const items = [];
+  for (let i = 0; i < 46; i++) {
+    items.push({
+      key: i,
+      name: `Edward King ${i}`,
+      age: 32,
+      address: `London, Park Lane no. ${i}`,
+    });
+  }
 
-
+  const onSelectChange = (newSelectedRowKeys) => {
+    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
   return (
-    <div className='flex flex-col h-screen w-full items-center justify-center'>
+   
+  
+   
+    <div className='flex flex-col h-screen items-center justify-center'>
       <Outlet/>
       <ul className='grid grid-cols-3 gap-1'>
       {
@@ -111,8 +145,25 @@ export const File = ()=> {
         )
       }
       </ul>
-      
+      <div>
+      <div
+        style={{
+          marginBottom: 16,
+        }}
+      >
+        <span
+          style={{
+            marginLeft: 8,
+          }}
+        >
+         
+        </span>
+      </div>
+      <Table rowSelection={rowSelection} columns={columns} dataSource={items} />
     </div>
+    </div> 
+          
+    
   );
 };
 
