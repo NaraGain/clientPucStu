@@ -40,15 +40,16 @@ const renderDesc = (title)=>{
 export default function Instruction ({headers}){
      const header =  headers.toUpperCase()
        return <div className="mt-4 font-roboto"> 
-          <span className="bg-purple-100 border-[1px] border-variation-400 px-2 py-1.5
+          <span className="bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white border-[1px] border-variation-400 px-2 py-1.5
            my-3 rounded-full items-center gap-2 inline-flex text-variation-400">
-            <Icon color={"gray"} name={<CiCircleQuestion/>} Size={"1.5rem"}></Icon>
+            <Icon color={"white"} name={<CiCircleQuestion/>} Size={"1.5rem"}></Icon>
         <h2 className="tracking-wide">{headers}</h2>
       </span>
-     <article className={styleInstruction.article}>
+     <article className="flex md:py-3 py-4 space-x-1 
+                       items-center md:space-x-2 tracking-wide">
      <h1 className="md:text-[18px]"><Icon Size="1.5rem" color={""} name={<CiBellOn/>}>
       </Icon></h1> 
-        <p className={styleInstruction.paragrah}>
+        <p className="text-[16px] md:text-[16px] md:w-full w-80 truncate text-gray-600">
        {renderDesc(header)}
         </p>
      </article>
@@ -56,9 +57,3 @@ export default function Instruction ({headers}){
     
     
  }
-
- const styleInstruction = {
-  "article": "flex md:py-3 py-4   items-center space-x-1 md:space-x-3 items-center md:space-x-2 tracking-wide",
-  "header": "font-semibold leading-none text-sm ",
-  "paragrah": "text-[16px] text-purple-700 md:text-[16px] md:w-full w-80 truncate text-gray-600"
-}

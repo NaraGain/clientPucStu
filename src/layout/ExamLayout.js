@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Outlet,  useParams, useLocation } from "react-router-dom";
+import { Outlet,  useParams, useLocation, Link } from "react-router-dom";
 import Timer from "../components/Timer";
 import Avatar from "../components/Avatar";
 import Cookie from "universal-cookie"
 import { Dropdown, Space,  } from 'antd';
 import Icon from "../components/Icon";
-import {CiExport,} from "react-icons/ci";
+import {CiExport} from "react-icons/ci";
+import {MdOutlineFrontHand} from "react-icons/md"
 import { IoIosArrowBack } from "react-icons/io";
 import { useDispatch,  } from "react-redux";
 import { loadingAction } from "../redux/loaderSlice";
@@ -46,12 +47,26 @@ export function ExamLayout(){
                      </NavigatorButton>
                     </div>
                  :   <img onMouseMove={mousDown} 
-                 className="w-[2.5rem] h-[2.5rem]" src="./asset/Puc_logo.png" alt="logo"/>
+                 className="w-[2.5rem] h-[2.5rem]" src={`${process.env.REACT_APP_API_KEY}`+"Puc_logo.png"} alt="logo"/>
             }
                 </> :<img onMouseMove={mousDown} 
-                 className="w-[2.5rem] h-[2.5rem]" src="./asset/Puc_logo.png" alt="logo"/>
+                 className="w-[2.5rem] h-[2.5rem]" src={`${process.env.REACT_APP_API_KEY}`+"Puc_logo.png"} alt="logo"/>
         } 
-            <h1 className="font-semibold text-[18px] text-variation-500">Oxam</h1>
+            <h1 className="font-semibold text-[16px] text-variation-500">Puc IFL</h1>
+            <span className="text-base border-l border-gray-600 lg:block hidden">
+            <ul className="flex gap-5 text-gray-600 mx-3">
+                <li className="hover:underline">
+                   <a>home</a>
+                    </li>
+                <li className="hover:underline">exam</li>
+                <li className="hover:underline">
+                   <a>classes</a>
+                    </li>
+                    <li className="hover:underline">
+                   <a>profile</a>
+                    </li>
+            </ul> 
+        </span>
         </span>
             {
              names.name  ?<div className="overflow-hidden md:block"> </div> : null
@@ -84,12 +99,30 @@ export const AvatarUser = () => {
         dispatch(loadingAction.HideLoading())
     }
     const items = [
+        {
+            key : '1',
+            label: (
+            <a className=" flex gap-3 items-center">
+                <div className="
+                p-1 
+                 bg-gradient-to-br from-green-400 via-green-500 to-green-600 rounded-full
+                 text-white
+                ">
+                <Icon Size={"1rem"} name={<MdOutlineFrontHand/>}/>    
+                </div>
+              Hello {username}</a>
+            
+            )
+        },
     {
-        key : '1',
+        key : '10',
         label: (
         <a className=" flex gap-3 items-center" onClick={logout}>
-            <Icon Size="1rem" name={<CiExport/>}>    
-            </Icon>
+            <div className=" p-1 
+                 bg-gradient-to-br from-rose-400 via-rose-500 to-rose-600 rounded-full
+                 text-white">
+            <Icon Size="1rem" name={<CiExport/>}/> 
+            </div>   
             Log out</a>
         
         )

@@ -1,38 +1,14 @@
-
-
-   .bg-rule{
-    background-image: url("../../public/asset/rulebg.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-   }
-
-   .welcome-section-bg{
-    background-image: url("../../public/asset/red-bg.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-   }
-   .login-section-bg{
-    background-image: url("../../public/asset/bg-yellow.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-   }
-
-   .red-section-bg{
-    background-image: url("../../public/asset/red-bg.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-   }
   .bg-login{
     background-image: url("../../public/asset/bg-login.png");
     background-repeat: no-repeat;
     background-size: cover;
   } 
 
-  .bg-login2 {
-    background-image: url("../../public/asset/bg-login2.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
+ .bg-exam{
+  background-image: url("../../public/asset/bg-exam.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+ }
 
   .footer-bg{
     background-image: url("../../public/asset/footer-bg.png");

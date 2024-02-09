@@ -33,8 +33,7 @@ const LoginForm = () => {
                cookie.set('stuId', response?.id)
               window.location.href = `/main?group=${encodedString}`
             }else{
-               message.error(response.message)
-               alert(response.message)  
+               message.error(response.message) 
             }      
         } catch (err) {
             message.error(err)
@@ -49,7 +48,7 @@ return  <div className="flex items-center bg-login min-h-screen font-roboto">
       
         <div className="flex items-center gap-2 my-2 justify-center  ">
             <div className ="w-full px-4  md:px-0">
-            <div className="text-purple-900 space-y-1   text-center">
+            <div className=" space-y-1   text-center">
                 <h1 className=" text-[24px] font-roboto ">
                  Welcome  {username}
                 </h1>
@@ -84,11 +83,13 @@ return  <div className="flex items-center bg-login min-h-screen font-roboto">
          <button
          type="submit"
          onClick={handleSubmit}
-                    className="block w-full font-roboto px-4 py-2.5 text-[16px] mt-5 
-                    text-sm bg-variation-500 rounded-md font-medium leading-5 text-center 
+                    className="
+                    bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600
+                    block w-full font-roboto px-4 py-2.5 text-[16px] mt-5 
+                    text-sm rounded-xl font-medium leading-5 text-center 
                     text-white transition-colors duration-150
-                     bg-purple-700 border border-transparent 
-                     active:bg-variation-400 hover:bg-blue-700 focus:outline-none 
+                     active:bg-purple-700 border border-transparent 
+                      hover:bg-blue-700 focus:outline-none 
                      focus:shadow-outline-blue"
                     href="#">
                     sign in

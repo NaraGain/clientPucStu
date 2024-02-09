@@ -1,4 +1,4 @@
-import React, {  useEffect} from "react"
+import React, {  useEffect, useState} from "react"
 import { useDispatch, useSelector } from "react-redux"
 import Welcome from "./component/Welcome"
 import { QuizCard } from "./component/QuizCard"
@@ -11,6 +11,7 @@ import { reportAction } from "../../redux/reportSlice"
 import Cookies from "universal-cookie"
 import { getExam } from "../../api/exam"
 import { loadingAction } from "../../redux/loaderSlice"
+import HeaderBar from "./component/HeaderBar"
 
 
 export default function Exam (){
@@ -21,12 +22,13 @@ const reportsQueston = useSelector(state => state.question.report)
 const report = useSelector(state => state.report)
 const location = useLocation()
 const exam = new URLSearchParams(location.search)
+const [title ,setTitle] = useState('')
 const examId = exam.get('id')
 const cookie = new Cookies()
 const userId = cookie.get('stuId')
 const courseId = cookie.get('course')
 
-console.log(report)
+
 // function api getGetExam
 
 //function random question of options
@@ -47,7 +49,7 @@ const onGetExam = async (e)=>{
     })
     dispatch(loadingAction.HideLoading())
     if(response.success){
-      //start random options question
+      setTitle(response.title)
       const randomizedData = response.result.map((exam) => ({
         ...exam,
         question: exam.question.map((q)=> {
@@ -108,19 +110,13 @@ return <>
       {
         question ? <>
           {
-      loadding ? (
-        <>
-   <div className="container mx-auto  
-   relative md:px-4  py-2 md:py-5 ">
-    <div className="flex text-[24px] text-variation-500 mx-3 
-    lg:mx-0 items-center gap-1 pb-2 2xl:mt-[7rem] mt-[5rem]">
-      <h1 className=" font-roboto">Section Question</h1>
-    </div>
-    
-     <p className="text-[14px] text-gray-600 mx-3 lg:mx-0 tracking-wider">
-      ✨ Please the choose section name before continue</p>
+   <>
+    <HeaderBar title={title} render={loadding}/>
+    <div className="container mx-auto md:py-0 ">
+      {
+        loadding ?
   <div className="grid md:grid-cols-3 grid-cols-2 pt-[1.5rem] lg:gap-7
-  gap-2 md:mx-0 mx-3 md:mt-0 mt-1 ">
+  gap-2 md:mx-0 mx-3 md:mt-0 my-2 2xl:mt-4 ">
     {
       question?.map((i , k)=>
        <QuizCard key={k} id={i._id} title={i.title}
@@ -129,11 +125,10 @@ return <>
         progress={i. progress}
         desc={i.score}></QuizCard>)
     }
+  </div> : <Welcome/>
+}
   </div>
-    </div>     
-</>
-
-  ): (<Welcome/>)
+    </>     
     }   
         </> : <></>
       }

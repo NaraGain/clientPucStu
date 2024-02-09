@@ -1,15 +1,18 @@
 import { Link } from "react-router-dom"
 import Icon from "../../../components/Icon"
-import { CiChat2,CiCircleQuestion, CiEdit,
-   CiHeadphones, CiText, CiViewList } 
+import {  CiEdit,
+   CiHeadphones, CiViewList} 
    from "react-icons/ci"
-import { IoEllipse} from "react-icons/io5";
+import { MdCreditScore } from "react-icons/md";
+import {RxLetterCaseLowercase} from 'react-icons/rx'
+import { BsPatchQuestion, BsQuestionDiamond,
+   BsCardChecklist, BsChatText } from "react-icons/bs";
 import { useSelector } from "react-redux"
-import {Tag} from "antd"
 
 
-export function QuizCard ({title,desc,examId,number,link,
-  progress ,id, onAnswer}){
+
+export function QuizCard ({title,desc,number,link,
+  progress}){
 const disableLink = useSelector(state => state.question.timeOut)
   const renderIcon = ()=>{
     const names = title.toUpperCase()
@@ -19,63 +22,54 @@ const disableLink = useSelector(state => state.question.timeOut)
     else if(names === "WRITING"){
         return <CiEdit/>
     }else if(names === "VOCABULARY"){
-      return <CiText/>
+      return <RxLetterCaseLowercase/>
     }else if (names === "GRAMMAR"){
-      return  <CiChat2/>
+      return  <BsChatText/>
     }else if (names === "LISTENING"){
       return <CiHeadphones/>
     }
     else{
-      return <CiCircleQuestion/>
+      return <BsPatchQuestion/>
     }
  
 
   }
 
-  const calulateProgress = (number, result) => {
-    const calulateP = (number / result) * 100
-    return calulateP
-  }
+ 
 
     return <Link 
     to={disableLink ? `/main` : `/exam/question?name=${link}&index=1` }>
     <div className={`min-w-full min-h-fit  font-roboto overflow-hidden
       `}>
-    <div className={`md:px-6 px-4 py-8  md:py-4  2xl:space-y-4 
+    <div className={`md:px-6 px-4 py-4 lg:py-2 2xl:py-4 2xl:space-y-4 
     bg-white rounded-xl border-[1px] border-neutral-200 hover:bg-yellow-50 hover:z-10 `}>
-      <div className="flex justify-end">
-        {
-          progress !== 0 ? <Icon color={"#10b981"} Size={"1rem"} name={<IoEllipse/>}></Icon> :
-          <Icon color={"#fef08a"} Size={"1rem"} name={<IoEllipse/>}></Icon>
-        }
-    
-      </div>
-           <div className="flex  items-center gap-2">
-            <div className=" w-10 h-10 lg:w-[4rem] lg:h-[4rem] ">
-            <Icon color="#0f3460" name={ title ? renderIcon(title) : null} ></Icon>
+           <div className="flex items-center gap-2">
+            <div className="bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 w-10 h-10 
+            p-2 my-2 lg:w-[4rem]  rounded-full lg:h-[4rem] ">
+            <Icon color="#ffff" name={ title ? renderIcon(title) : null} ></Icon>
             </div>    
               <h1 className="md:text-xl truncate text-center tracking-wide font-roboto
          t">{title}</h1>
+
            </div>
-       <div className="flex flex-wrap lg:gap-0  gap-3 py-2">
-       <div className="bg-gray-50 
-        text-slate-900 text-center rounded-l-full flex">
-          <Tag color="#175093">question {number}</Tag>
+       <div className="
+       font-rotobo
+       flex flex-wrap   border-t
+        border-gray-300 gap-5 text-[14px] py-2">
+       <div className="flex items-center gap-1">
+       <Icon Size={'1rem'} name={<BsQuestionDiamond/>}/>
+          <button className="">question {number}</button>
        </div>
-       <div className="bg-gray-100 flex items-center">
-        <Tag color="#16a34a">score {desc}</Tag>
+       <div className="flex gap-1 items-center">
+       <Icon Size={'1rem'} name={<MdCreditScore/>}/>
+        <button className="">score {desc}</button>
        </div>
-       <div className="bg-gray-50 flex items-center rounded-r-full -mx-1">
-          <Tag color="#fbbf24">{progress } / {number}</Tag>
+       <div className="flex gap-1 items-center">
+        <Icon color={progress > 0 ? "#10b981" : "#000"} Size={'1rem'} name={<BsCardChecklist/>}/>
+          <button className={progress > 0 ? "text-green-500 font-semibold" : ''}>{progress } / {number}</button>
        </div>
-      
-       </div>
-      
-      
-      
-    </div>
-    {/* <div className="bg-variation-400 py-1 rounded-br-lg rounded-bl-lg"></div> */}
-      
+       </div>     
+    </div>      
   </div>
     </Link>
     

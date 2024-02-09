@@ -182,33 +182,34 @@ useEffect(()=> {
   return <div className="flex flex-col lg:flex-row w-full h-screen font-roboto">
           {
             questions ? <>
-            <Tooltip title="expand the screen">
-              <FloatButton 
-              style={{
-                right: 164,
-              }}
-              icon={ collapsed ? <CiCircleChevRight/> : <CiCircleChevLeft/>}  
-              type="primary"
-              className="md:block hidden border-none fixed shadow-none z-10" 
-            onClick={handletoggleCollapsed}/>
-            </Tooltip>
     <div className={`${collapsed ? "w-0 transition-transform duration-100 ease-out" 
-    : "lg:w-1/5 2xl:w-[20%]"} bg-white mt-0 overflow-y-auto`}>
-      <div className=" mt-[3.5rem] lg:block hidden">
-    <p className="hidden text-start 
-    py-2 p-2 bg-yellow-50  lg:block font-roboto">Progress {questions.progress}</p>
+    : "lg:w-1/5 2xl:w-[20%]"} bg-white lg:bg-neutral-50 mt-0 overflow-y-auto`}>
+      <div className=" mt-[3.5rem] lg:flex justify-between">
+    <p className="hidden text-start  px-4 
+    py-1 shadow-sm text-[12px]
+    bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white  
+    lg:inline-flex rounded-full m-2 font-sans tracking-wide">Question List</p>
+    <button 
+    onClick={handletoggleCollapsed}
+    className={ collapsed ? "fixed p-2 shadow-md bg-neutral-100"
+     :` px-2 m-2 py-1 rounded-full
+     bg-gradient-to-br from-cyan-400 via-cyan-500 text-[12px]
+      to-cyan-600 flex justify-center items-center text-white `}>
+      <Icon Size={"1.3rem"} name={ collapsed ? 
+      <CiCircleChevRight/> : <CiCircleChevLeft/>}  />
+      </button>
       </div>
       <ul className="mt-[4.5rem]   overflow-x-auto lg:mt-0 lg:flex-col flex justify-center">
     {
     questions?.question.map((items, key)=>{
       return (
-        <li  className="turncate cursor-pointer inline-flex lg:flex ">
+        <li  className="turncate cursor-pointer my-1 inline-flex lg:flex ">
           <button onClick={()=>handleNavigate(key)} className={`${items?._id 
-          === questions?.question[currentQuestion]?._id ? "bg-purple-100 font-semibold text-gray-600" 
-          : "bg-white"}
-           border-[1px] w-full rounded-full truncate lg:rounded-md py-0 lg:py-2 mx-2 px-2
-          md:shadow-none md:border-none inline-flex font-roboto items-center text-[16px]`}>{key + 1}
-           <p className="hidden md:block w-full truncate"> . 
+          === questions?.question[currentQuestion]?._id ? "bg-white lg:border-l-[2px] lg:border-cyan-400  font-sans text-gray-600" 
+          : "bg-neutral-50"}
+           w-full rounded-full lg:rounded-none truncate py-0 lg:py-2 mx-2 px-2
+          md:shadow-none  inline-flex font-roboto items-center text-[16px]`}>{key + 1}
+           <p className="hidden md:block w-full truncate text-start"> . 
             {
               questions.question[currentQuestion].name === "writing" && "Choose the topic"
             }
@@ -226,27 +227,31 @@ useEffect(()=> {
     </div>
 
   {/* task area */}
-    <div className="lg:w-[75%] flex-1 flex flex-col lg:mt-[3.5rem]">
+    <div className="lg:w-[75%] bg-white flex-1 flex flex-col lg:mt-[3.5rem]">
       {
         result ? <div className="flex-1 flex-col h-screen 
                                  items-center w-full">
                    <Result
-                  className="font-roboto mt-4"
+                  className="font-sans mt-4"
                   status={"success"}
                   title={"click button for go home page"}
                   subTitle={`please review your answer
                    before do next section`}
                   extra={
                     <div className="flex gap-3 font-roboto justify-center">
-                    <Button className="bg-yellow-400
-                      
-                      border-[1px]" onClick={()=> {
+                    <Button 
+                    className="rounded-full bg-gradient-to-br
+                     from-yellow-200
+                      via-yellow-300
+                       to-yellow-400" 
+                    onClick={()=> {
                       handleAnswerNext()
                       setResult(false)
                     }
-                      }>Previous</Button>
-                    <Button className="text-white
-                     bg-variation-500  border-[1px]" 
+                      }>previous</Button>
+                    <Button className="bg-gradient-to-br
+                     from-cyan-400 via-cyan-500 
+                     to-cyan-600 text-white rounded-full" 
                      onClick={()=>{
                       navigator(-1 ,{replace : true})
                       dispatch(questionAction.addReport({
@@ -257,18 +262,21 @@ useEffect(()=> {
                         
                       }))
                       
-                      }}>Go to Exam</Button>
+                      }}>next section</Button>
                     </div>
                   }/> </div> : <>
 <div className=" flex-1 overflow-y-auto ">
 <div className="md:max-w-[80%] px-4 md:px-0 mx-auto">
 <Instruction headers={name}></Instruction>
 <div className="">
-<p className="mx-3 my-3 text-[14px] inline-flex bg-rose-50 rounded-full px-2 py-1.5 ">
+<p className="my-3 text-[14px] inline-flex
+text-yellow-700 
+border border-yellow-300
+ bg-yellow-100 rounded-full px-2 py-1.5 ">
   Desc : {questions.question[currentQuestion]?.description}</p>  
-  <p className="my-3 text-[14px] bg-green-50 text-green-500
+  <p className="my-3 mx-1 text-[14px] border-green-500 bg-green-100 border text-green-500
    rounded-full inline-flex px-2 py-1.5">
-  point : {questions.question[currentQuestion]?.point}</p>
+  {questions.question[currentQuestion]?.point}pt</p>
   </div>
   <>
   {
@@ -328,8 +336,8 @@ useEffect(()=> {
               </>}
 
          </div>
-            <div className="bg-white text-gray-600 p-4 mb-2 rounded-lg shadow-sm">
-             <p className="text-[18px] font-semibold">
+            <div className="bg-neutral-50  text-gray-600 p-4 mb-2 rounded-lg shadow-sm">
+             <p className="text-[18px] text-gray-700 font-semibold">
               {currentQuestion+1}.
               {questions.question[currentQuestion].question}</p>
              <ul className="my-5 ">
@@ -373,24 +381,31 @@ useEffect(()=> {
     questions?.question[currentQuestion]?.name === "writing" ? <></> :
      <div className="bg-white border-neutral-50 flex justify-center  py-4 gap-3">
      {
-      previous ? <Button className="bg-yellow-300" onClick={
+      previous ? <Button 
+      className="bg-gradient-to-br from-yellow-200
+       via-yellow-300 to-yellow-400 rounded-full" onClick={
         handleAnswerPrev
       
       }>previous</Button> : <></>
      }
      {
       questions.question[currentQuestion].name == "Blank" ?<> { 
-          answerBtn ?  <Button onClick={()=>{
+          answerBtn ?  <Button
+          className=" rounded-full bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white"
+          onClick={()=>{
           form.resetFields()
           setAnswer(false)
           handleAnswerNext(questions.question[currentQuestion]._id)}}>Next</Button>
-         :<Button onClick={(value)=>{
+         :<Button
+         className="rounded-full bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white"
+         onClick={(value)=>{
           getAnswer(form.getFieldValue(), questions.question[currentQuestion]._id, name,
            questions?.question[currentQuestion]?.correctAnswer)
           setAnswer(true)
          }}>Answer</Button> 
         
        } </> :  <Button
+       className="bg-gradient-to-br from-cyan-400 via-cyan-500 to-cyan-600 text-white rounded-full"
        onClick={handleAnswerNext}>Next</Button> 
      }
      </div>
@@ -407,7 +422,7 @@ useEffect(()=> {
           title="404"
           subTitle="Sorry, the page you visited does not exist."
           extra={<Button
-                  className="bg-rose-500 text-white"
+                  className="bg-rose-500 rounded-full text-white"
                   onClick={()=> navigator(-1 , {replace:true})}
           >Back Home</Button>}
             />

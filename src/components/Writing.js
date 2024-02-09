@@ -114,7 +114,7 @@ useEffect(()=>{
 const items = [
   {
     key: '1',
-    label: 'Writing',
+    label: 'writing',
     children:  <div className="my-5">
     <p className="text-end text-[16px]
 font-sans text-gray-600">{wordCount}/200</p>
@@ -141,7 +141,8 @@ name={"subjectName"}></Form.Item>
 <Form.Item className="flex justify-end">
 <Button
 disabled={disable}
-className="bg-variation-500 text-white"  
+className="bg-gradient-to-br from-cyan-400 via-cyan-500
+ to-cyan-600 rounded-full text-white"  
 htmlType="submit">Submit</Button>
 </Form.Item>
       </div>
@@ -151,17 +152,29 @@ htmlType="submit">Submit</Button>
   },
   {
     key: '2',
-    label: 'Upload File',
+    label: 'image',
     children: <>
-    <div className="mt-4 py-5 relative">
-    <>
+    <div className="py-5" >
+    <div className="border py-2 h-[10rem] bg-neutral-50
+     border-dashed flex flex-col items-center justify-center rounded-xl">
+      <div>
       <Upload 
+       accept=".png, .jpg, .jpeg,"
+      className="flex w-full"
       {...props}
-      listType="picture-circle">
-        <Button icon={<UploadOutlined />}></Button>
+      listType="picture">
+        {
+          fileList.length > 0 ? null :
+        <Button className="" icon={<UploadOutlined />}>
+          upload picture jpg , png , jpeg form*
+        </Button>
+  }
       </Upload>
-      <Button
-        className="bg-variation-500 text-white "
+      </div>
+    </div>
+    <Button
+        className="bg-gradient-to-br from-cyan-400
+         via-cyan-500 to-cyan-600 rounded-full text-white "
         onClick={handleUpload}
         disabled={fileList.length === 0}
         loading={uploading}
@@ -171,7 +184,6 @@ htmlType="submit">Submit</Button>
       >
         {uploading ? 'Uploading' : 'Submit'}
       </Button>
-    </>
     <br />
             </div> 
     </>,

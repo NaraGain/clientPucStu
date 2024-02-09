@@ -5,8 +5,7 @@ import Cookies from "universal-cookie";
 import { useDispatch } from "react-redux";
 import Icon from "../../components/Icon";
 import { Groups } from "../../api/exam";
-import moment from "moment"
-import {  FcFaq} from "react-icons/fc";
+import { CgCopy } from "react-icons/cg";
 import { loadingAction } from "../../redux/loaderSlice";
 import { ExamBox } from "./componets/examBox";
 
@@ -60,26 +59,21 @@ export default function Main () {
      justify-center w-full md:overflow-hidden h-screen font-roboto">
             <div className="space-y-2 px-3  ">
               <div className="flex justify-center">
-              <Icon Size={"4rem"} name={<FcFaq/>}>
-              </Icon>
+                <div className="bg-gradient-to-r from-sky-400 to-cyan-300
+                 w-[4rem] h-[4rem] 2xl:w-[6rem] 2xl:h-[6rem] 
+                p-4 rounded-full">
+                <Icon color={"#ffff"}  name={<CgCopy/>}/>
+                </div>
+              
               </div>
              
             <h1 className="text-center text-[24px] ">
               Greeting {cookie.get('studentname')}</h1>
              <div className="flex justify-center gap-2 flex-col items-center">
               <div className="flex items-center gap-2">
-              <p className="text-center text-[18px]">{data?.group} {data?.class}
+              <p className="text-center font-sans text-[18px]">Welcome to class {data?.group} {data?.class}
               </p>
               </div>
-              <p className="text-center break-words ">
-              Following specific instructions provided by the invigilators or 
-              examiners, including how to mark answers
-            </p>
-            
-            <p className="text-center break-words sm:block ">
-             required to maintain silence and refrain from communicating with 
-            other students during exams.
-            </p>
              </div>          
             </div>
             <ExamBox group={data?.time} exam={exam} currentDate={currentDate}/>

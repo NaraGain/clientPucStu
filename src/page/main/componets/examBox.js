@@ -54,30 +54,29 @@ useEffect(()=>{
        
    return <>
           {
-            exam ? null : <p className='text-gray-600 text-[14px]
-             bg-yellow-50 rounded-full px-4 py-1.5'>exam are not available</p>
-          }
-          {
-            exam.map((exams, key)=><Form key={key}>
+            exam ? exam.map((exams, key)=><Form key={key}>
                <Link to={`/exam?id=${exams._id}`}>
             <button className=" mt-4 border-neutral-200
-            active:bg-neutral-50
-             border-[2px] text-gray-600
+            active:bg-neutral-50 border-dashed
+             border-[1px] text-gray-600
              px-5  py-2 rounded-xl">
-              <div className="flex justify-end">
+              <div className="flex justify-end py-1">
               <Icon color={exams?.onfinish ? "green" : "blue"} 
               Size={"1rem"} name={<IoEllipse/>}></Icon>
               </div>
-              <div className="pb-6 py-2 font-roboto text-[16px]">
-              {exams.name}
+              <hr></hr>
               <div className="w-[4rem]​​ ​ h-[4rem] my-4">
                 <Icon color={"#0f3460"} name={<CiReceipt/>}/>
               </div>
-            <p>exam {moment(exams?.time).format('LT')}</p>  
+              <div className="pb-6 py-2 font-roboto text-[16px]">
+            <p className='font-semibold'>exam {moment(exams?.time).format('LT')}</p>  
+             <p>{exams.name}</p>
               </div> 
              </button>
             </Link>
-             </Form>)
+             </Form>) : <p>
+              no exam exist
+             </p>
           }   
           </>  
 }
